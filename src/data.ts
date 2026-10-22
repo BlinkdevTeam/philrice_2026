@@ -1,11 +1,13 @@
+import { CalendarDays, MapPin, Radio } from "lucide-react";
+
 /* ---------- time ---------- */
 export const EVENT_DATE = new Date("2026-11-23T09:00:00+08:00").getTime();
 
 /* ---------- hero / about ---------- */
 export const DETAILS = [
-  { label: "DATE", value: "Nov 23–25, 2026" },
-  { label: "LOCATION", value: "Iloilo + Online" },
-  { label: "FORMAT", value: "Hybrid Event" },
+  { label: "Date", value: "Nov 23–25, 2026", icon: CalendarDays },
+  { label: "Location", value: "Iloilo + Online", icon: MapPin },
+  { label: "Format", value: "Hybrid Event", icon: Radio },
 ];
 
 export const STATS = [

@@ -193,3 +193,145 @@
       rgba(0, 187, 255, 0) 100%);
   opacity: 0.6;
 }
+
+/* ───────── shared ───────── */
+@keyframes glow-breathe {
+
+  0%,
+  100% {
+    scale: 1;
+    opacity: 0.3;
+  }
+
+  50% {
+    scale: 1.12;
+    opacity: 0.55;
+  }
+}
+
+/* ───────── glow-main (top-left) ───────── */
+@keyframes glow-drift {
+
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+
+  33% {
+    transform: translate(4%, -3%);
+  }
+
+  66% {
+    transform: translate(-3%, 4%);
+  }
+}
+
+.glow-main {
+  opacity: 0.4;
+  animation:
+    glow-breathe 7s ease-in-out infinite,
+    glow-drift 18s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+/* ───────── glow-accent (optional violet one) ───────── */
+@keyframes glow-drift-alt {
+
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+
+  50% {
+    transform: translate(-6%, -4%);
+  }
+}
+
+.glow-accent {
+  opacity: 0.3;
+  animation:
+    glow-breathe 9s ease-in-out -3s infinite,
+    glow-drift-alt 22s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+/* ───────── glow-alt (bottom-right) ───────── */
+@keyframes glow-b-pulse {
+
+  0%,
+  100% {
+    scale: 0.92;
+    opacity: 0.35;
+  }
+
+  40% {
+    scale: 1.1;
+    opacity: 0.65;
+  }
+
+  70% {
+    scale: 1.02;
+    opacity: 0.45;
+  }
+}
+
+@keyframes glow-b-sway {
+
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+
+  25% {
+    transform: translate(-7%, -5%);
+  }
+
+  50% {
+    transform: translate(-3%, -10%);
+  }
+
+  75% {
+    transform: translate(5%, -4%);
+  }
+}
+
+.glow-alt {
+  opacity: 0.45;
+  animation:
+    glow-b-pulse 11s ease-in-out -4s infinite,
+    glow-b-sway 26s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+/* ───────── accessibility ───────── */
+@media (prefers-reduced-motion: reduce) {
+
+  .glow-main,
+  .glow-accent,
+  .glow-alt {
+    animation: none;
+  }
+}
+
+/*------------clock-------------*/
+@keyframes tick-in {
+  from {
+    opacity: 0;
+    transform: translateY(-30%);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.tick {
+  animation: tick-in 0.35s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tick {
+    animation: none;
+  }
+}

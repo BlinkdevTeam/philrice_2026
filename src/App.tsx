@@ -5,6 +5,11 @@ import {
   useRef,
   type ReactNode,
 } from "react";
+
+import "./App.css";
+
+import { Lock, LockOpen } from "lucide-react";
+
 import Header from "./Header";
 import {
   EVENT_DATE,
@@ -178,6 +183,7 @@ export default function App() {
   }, []);
 
   //svg animated
+  const DEBUG = false;
   const wrapRef = useRef<HTMLDivElement>(null);
   const timer = useRef<number | undefined>(undefined);
 
@@ -232,7 +238,7 @@ export default function App() {
         {/* radial */}
         <div
           aria-hidden
-          className="pointer-events-none absolute left-0 top-0 -z-10 h-210 w-260 -translate-x-1/4 -translate-y-1/3 bg-[radial-gradient(ellipse_closest-side,rgba(77,156,255,0.6),rgba(77,156,255,0))] opacity-40"
+          className="glow-main pointer-events-none absolute left-0 top-0 -z-10 h-210 w-260 -translate-x-1/4 -translate-y-1/3 bg-[radial-gradient(ellipse_closest-side,rgba(77,156,255,0.6),rgba(77,156,255,0))]"
         />
         {/* hero */}
         <section
@@ -241,7 +247,7 @@ export default function App() {
           {/* radial */}
           <div
             aria-hidden
-            className="pointer-events-none absolute -right-100 bottom-0 -z-10 h-300 w-300 translate-y-50 bg-[radial-gradient(circle_closest-side,rgba(0,85,255,0.5),rgba(0,136,255,0))] opacity-55"
+            className="glow-alt pointer-events-none absolute -right-100 bottom-0 -z-10 h-300 w-300 translate-y-70 bg-[radial-gradient(circle_closest-side,rgba(0,85,255,0.5),rgba(0,136,255,0))] opacity-55"
           />
           {/* grid lines */}
           <div
@@ -249,63 +255,108 @@ export default function App() {
             className="pointer-events-none absolute inset-y-0 left-1/2 -z-10 w-screen -translate-x-1/2 bg-[linear-gradient(to_right,rgba(77,156,255,0.07)_1px,transparent_1px),linear-gradient(to_bottom,rgba(77,156,255,0.07)_1px,transparent_1px)] bg-size-[80px_80px] opacity-40"
           />
           <div>
-            <span
-              className={`${BOX} inline-block rounded-full px-4 py-2 text-xs tracking-widest`}
-            >
-              LIVE + VIRTUAL · NOVEMBER 14–15, 2027
+            <span className="inline-flex items-center gap-3 rounded-full border border-white/15 bg-white/5 py-1.5 pl-3 pr-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/80 shadow-[0_0_24px_rgba(77,156,255,0.15)] backdrop-blur-md">
+              {/* status */}
+              <span className="flex items-center gap-2 text-white">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-75" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-red-500" />
+                </span>
+                Live
+              </span>
+
+              {/* divider */}
+              <span className="h-3 w-px bg-white/20" aria-hidden="true" />
+
+              {/* detail */}
+              <span>Hybrid · Nov 23–25, 2026</span>
             </span>
             <h1 className="mt-6 text-6xl font-extrabold leading-tight md:text-7xl">
               UNLOCKING
               <br />
-              THE VISAYAS’
+              <span className="text-[#fef102]">THE</span> VISAYAS’
             </h1>
             <p className="mt-6 text-2xl font-semibold">
               Potential for Rice Security Through <br /> Convergence and Shared
               Commitment
             </p>
-            <div
-              id="tickets"
-              className="mt-8 grid grid-cols-4 gap-4 sm:gap-8 md:gap-12"
-            >
-              {timerItems.map((item) => (
-                <div
-                  key={item.label}
-                  className="flex min-w-0 flex-col items-center"
-                >
-                  <span className="text-4xl font-bold leading-none tracking-tight text-[#666666] sm:text-5xl md:text-7xl">
-                    {String(item.value).padStart(2, "0")}
-                  </span>
-                  <span className="mt-2 text-xs font-medium uppercase tracking-widest text-[#666666]">
-                    {item.label}
-                  </span>
-                </div>
-              ))}
+            <div className="mt-8 grid max-w-xl grid-cols-4 gap-3 sm:gap-4">
+              {timerItems.map((item) => {
+                const isSeconds = item.label.toLowerCase() === "seconds";
+                return (
+                  <div
+                    key={item.label}
+                    className="flex min-w-0 flex-col items-center rounded-2xl border border-white/10 bg-white/5 px-2 py-4 backdrop-blur-md sm:py-5"
+                  >
+                    <span
+                      key={item.value} // new key each change re-triggers the tick animation
+                      className={`tick text-4xl font-bold leading-none tabular-nums tracking-tight sm:text-5xl md:text-6xl ${
+                        isSeconds
+                          ? "text-[#4d9cff] drop-shadow-[0_0_14px_rgba(77,156,255,0.6)]"
+                          : "text-white"
+                      }`}
+                    >
+                      {String(item.value).padStart(2, "0")}
+                    </span>
+                    <span className="mt-2 text-[10px] font-medium uppercase tracking-[0.2em] text-white/50 sm:text-xs">
+                      {item.label}
+                    </span>
+                  </div>
+                );
+              })}
             </div>
-            <dl className="mt-10 grid max-w-xl gap-4 sm:grid-cols-3">
-              {DETAILS.map((d) => (
-                <div key={d.label} className={`${BOX} rounded-xl p-4`}>
-                  <dt className="text-xs tracking-widest">{d.label}</dt>
-                  <dd className="mt-1 font-bold">{d.value}</dd>
+            <dl className="mt-6 grid max-w-xl grid-cols-1 divide-y divide-white/10 overflow-hidden rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+              {DETAILS.map(({ label, value, icon: Icon }) => (
+                <div
+                  key={label}
+                  className="flex items-center gap-3 px-4 py-3.5"
+                >
+                  <Icon
+                    className="h-5 w-5 shrink-0 text-[#4d9cff]"
+                    aria-hidden="true"
+                  />
+                  <div className="min-w-0">
+                    <dt className="text-[10px] font-medium uppercase tracking-[0.2em] text-white/50">
+                      {label}
+                    </dt>
+                    <dd className="mt-0.5 truncate text-sm font-semibold text-white">
+                      {value}
+                    </dd>
+                  </div>
                 </div>
               ))}
             </dl>
           </div>
 
-          <div className="">
+          <div
+            className="group relative translate-x-20"
+            onMouseEnter={() => {
+              setHover(true);
+              playRange(HOVER.from, HOVER.to);
+            }}
+            onMouseLeave={() => {
+              setHover(false);
+              playRange(LEAVE.from, LEAVE.to);
+            }}
+          >
+            {/* globe rings */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0"
+            >
+              <div className="absolute inset-[6%] rounded-full border border-white/10 transition-colors duration-700 group-hover:border-[#4d9cff]/40" />
+              <div className="absolute inset-[20%] rounded-full border border-dashed border-white/10 transition-colors duration-700 group-hover:border-[#4d9cff]/30 animate-[spin_90s_linear_infinite]" />
+              {/* center glow that lights up on hover */}
+              <div className="absolute inset-[30%] rounded-full bg-[#4d9cff]/0 blur-3xl transition-all duration-700 group-hover:bg-[#4d9cff]/25" />
+            </div>
+
+            {/* the lock */}
             <div
               ref={wrapRef}
               data-hover="false"
               role="img"
               aria-label="Animated lock illustration"
               className="lock-wrap relative flex aspect-square w-full items-center justify-center [&>svg]:h-full [&>svg]:w-full"
-              onMouseEnter={() => {
-                setHover(true);
-                playRange(HOVER.from, HOVER.to);
-              }}
-              onMouseLeave={() => {
-                setHover(false);
-                playRange(LEAVE.from, LEAVE.to);
-              }}
               dangerouslySetInnerHTML={{ __html: lockAnimated }}
             />
           </div>
