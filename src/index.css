@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+@property --amp {
+   syntax: "<number>";
+   inherits: true;
+   initial-value: 1;
+}
+
+@property --a {
+   syntax: "<angle>";
+   inherits: false;
+   initial-value: 0deg;
+}
+
+.lock-wrap {
+   --amp: 1;
+   /* 1 = orbiting, 0 = still */
+   transition: --amp 1.4s ease-in-out;
+}
+
+.lock-wrap[data-hover="true"] {
+   --amp: 0;
+}
+
+.lock-piece {
+   transform-box: view-box;
+   /* rotate around the whole SVG, not the piece */
+   transform-origin: 50% 50%;
+   /* orbit center */
+   rotate: calc(var(--a) * var(--dir) * var(--amp));
+   animation: lock-orbit var(--dur) linear var(--delay) infinite;
+}
+
+@keyframes lock-orbit {
+   to {
+      --a: 360deg;
+   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+   .lock-piece {
+      animation: none;
+   }
+}
