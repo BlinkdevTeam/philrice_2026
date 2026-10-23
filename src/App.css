@@ -305,7 +305,7 @@
 
 /* ───────── accessibility ───────── */
 @media (prefers-reduced-motion: reduce) {
-
+  
   .glow-main,
   .glow-accent,
   .glow-alt {
@@ -319,7 +319,7 @@
     opacity: 0;
     transform: translateY(-30%);
   }
-
+  
   to {
     opacity: 1;
     transform: none;
@@ -333,5 +333,151 @@
 @media (prefers-reduced-motion: reduce) {
   .tick {
     animation: none;
+  }
+}
+
+/* ───────── speaker line ───────── */
+@property --beam-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes beam-spin {
+  to {
+    --beam-angle: 360deg;
+  }
+}
+
+@keyframes scan {
+  0% {
+    top: -30%;
+    opacity: 0;
+  }
+  
+  10% {
+    opacity: 1;
+  }
+  
+  90% {
+    opacity: 1;
+  }
+  
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
+
+/* glowing beam that travels around the card border */
+.tech-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: conic-gradient(from var(--beam-angle),
+  transparent 0 68%,
+  rgba(77, 156, 255, 0.9) 88%,
+  #bfe0ff 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+  animation: beam-spin 2.4s linear infinite;
+}
+
+.tech-card:hover::before {
+  opacity: 1;
+}
+
+/* scan line sweeping down the portrait, once per hover */
+.scan-line {
+  position: absolute;
+  inset-inline: 0;
+  top: -30%;
+  height: 28%;
+  background: linear-gradient(to bottom,
+  transparent,
+  rgba(77, 156, 255, 0.22) 85%,
+  rgba(77, 156, 255, 0.9) 99%,
+  transparent 100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.tech-card:hover .scan-line {
+  animation: scan 1.4s ease-in-out 1 both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  
+  .tech-card::before,
+  .tech-card:hover .scan-line {
+    animation: none;
+  }
+}
+
+@keyframes modal-glow {
+  from {
+    box-shadow: 0 0 60px -22px rgba(77, 156, 255, 0.28);
+  }
+  
+  to {
+    box-shadow: 0 0 90px -16px rgba(77, 156, 255, 0.5);
+  }
+}
+
+.modal-glow {
+  animation: modal-glow 2.5s ease-in-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal-glow {
+    animation: none;
+    box-shadow: 0 0 80px -20px rgba(77, 156, 255, 0.4);
+  }
+}
+
+/* ───────── animated grid line hero section ───────── */
+@keyframes grid-flow {
+  0% {
+    -webkit-mask-position: 100% 0;
+    mask-position: 100% 0;
+  }
+
+  60%,
+  100% {
+    -webkit-mask-position: 0% 0;
+    mask-position: 0% 0;
+  }
+}
+
+.grid-flow {
+  --angle: 105deg;
+  -webkit-mask-image: linear-gradient(var(--angle), transparent 43%, #000 50%, transparent 57%);
+  mask-image: linear-gradient(var(--angle), transparent 43%, #000 50%, transparent 57%);
+  -webkit-mask-size: 300% 100%;
+  mask-size: 300% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  animation: grid-flow 12s ease-in-out infinite;
+  will-change: mask-position;
+}
+
+/* second band: other angle, slower, runs the opposite way, offset in time */
+.grid-flow-b {
+  --angle: 75deg;
+  animation-duration: 18s;
+  animation-delay: -6s;
+  animation-direction: reverse;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grid-flow {
+    display: none;
   }
 }

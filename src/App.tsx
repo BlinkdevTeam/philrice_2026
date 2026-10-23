@@ -7,17 +7,21 @@ import {
 } from "react";
 
 import "./App.css";
-
-import { Lock, LockOpen } from "lucide-react";
+// import { motion } from "framer-motion";
+import { WRAP, SectionLabel } from "./ui"; // adjust
 
 import Header from "./Header";
+import GalleryList from "./GalleryList";
+import SpeakerDirectory from "./SpeakerDirectory";
+import Schedule from "./Schedule";
+import GridRain from "./GridRain";
+
 import {
   EVENT_DATE,
   DETAILS,
   STATS,
   FEATURES,
-  SPEAKERS,
-  SCHEDULE,
+  // SCHEDULE,
   FAQS,
   FOOT_COLS,
 } from "./data";
@@ -32,16 +36,16 @@ import BagongPilipinas from "./assets/bagong-pilipinas.png";
 import UgnayPalay from "./assets/ugnay-palay-logo.png";
 
 /* ---------- layout helpers ---------- */
-const WRAP = "mx-auto w-full max-w-[1280px] px-6";
+// const WRAP = "mx-auto w-full max-w-[1280px] px-6";
 const BOX = "border border-gray-400";
 
-function SectionLabel({ num, name }: { num: string; name: string }) {
-  return (
-    <p className="text-sm font-semibold tracking-widest">
-      {num} / {name}
-    </p>
-  );
-}
+// function SectionLabel({ num, name }: { num: string; name: string }) {
+//   return (
+//     <p className="text-sm font-semibold tracking-widest">
+//       {num} / {name}
+//     </p>
+//   );
+// }
 
 /* ---------- dotted grid (schedule + footer) ---------- */
 const DOT = "border-dotted border-gray-500";
@@ -122,7 +126,7 @@ const rand = (a: number, b: number) => a + Math.random() * (b - a);
 
 /* ---------- page ---------- */
 export default function App() {
-  const [day, setDay] = useState<1 | 2>(1);
+  // const [day, setDay] = useState<1 | 2>(1);
   const [open, setOpen] = useState<number | null>(0);
 
   const [emailCopied, setEmailCopied] = useState(false);
@@ -183,7 +187,7 @@ export default function App() {
   }, []);
 
   //svg animated
-  const DEBUG = false;
+  // const DEBUG = false;
   const wrapRef = useRef<HTMLDivElement>(null);
   const timer = useRef<number | undefined>(undefined);
 
@@ -254,6 +258,7 @@ export default function App() {
             aria-hidden
             className="pointer-events-none absolute inset-y-0 left-1/2 -z-10 w-screen -translate-x-1/2 bg-[linear-gradient(to_right,rgba(77,156,255,0.07)_1px,transparent_1px),linear-gradient(to_bottom,rgba(77,156,255,0.07)_1px,transparent_1px)] bg-size-[80px_80px] opacity-40"
           />
+          <GridRain />
           <div>
             <span className="inline-flex items-center gap-3 rounded-full border border-white/15 bg-white/5 py-1.5 pl-3 pr-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/80 shadow-[0_0_24px_rgba(77,156,255,0.15)] backdrop-blur-md">
               {/* status */}
@@ -363,185 +368,72 @@ export default function App() {
         </section>
 
         {/* about */}
-        <section id="about" className="py-20">
+        <section id="about" className="overflow-x-clip py-30">
           <div className={WRAP}>
-            <div className="grid gap-10 lg:grid-cols-2">
+            <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
               <div>
                 <SectionLabel num="01" name="ABOUT" />
-                <h2 className="mt-4 text-4xl font-extrabold leading-tight">
-                  38th UGNAY PALAY
-                  <br />
-                  National Rice R4DE Conference
+                <h2 className="mt-4 text-4xl font-extrabold leading-tight sm:text-5xl">
+                  38th Ugnay Palay
+                  <span className="block text-white/60">
+                    National Rice R4DE Conference
+                  </span>
                 </h2>
-                <dl className="mt-8 flex gap-12">
+
+                <dl className="mt-10 grid max-w-md grid-cols-3 divide-x divide-white/10 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md">
                   {STATS.map((s) => (
-                    <div key={s.l}>
-                      <dd className="text-3xl font-bold">{s.n}</dd>
-                      <dt className="text-sm">{s.l}</dt>
+                    <div key={s.l} className="flex flex-col-reverse px-5 py-4">
+                      <dt className="mt-1 text-[10px] font-medium uppercase tracking-[0.2em] text-white/50">
+                        {s.l}
+                      </dt>
+                      <dd className="text-3xl font-bold tabular-nums text-white">
+                        {s.n}
+                      </dd>
                     </div>
                   ))}
                 </dl>
               </div>
-              <p className="self-center text-lg leading-8">
-                EVENT 2027 brings together builders, researchers and founders to
-                explore the technologies redefining how we work, create and
-                connect. Expect live demos, immersive labs and conversations
-                that turn bold ideas into working prototypes you can take home.
+
+              <p className="self-center text-base leading-8 text-white/70 lg:text-lg">
+                The 38th Ugnay Palay National Rice R4D Conference arrives at a
+                crucial moment in the evolution of the Philippine rice industry.
+                This year’s theme,{" "}
+                <span className="font-semibold text-white">
+                  “UNLOCKING THE VISAYAS’ Potential for Rice Security Through
+                  Convergence and Shared Commitment”
+                </span>{" "}
+                encapsulates DA-PhilRice’s commitment to driving innovation,
+                resilience, and sustainability in Philippine agriculture. It
+                reflects the Institute’s dedication to placing farmers at the
+                core of these advancements, ensuring their needs are met and
+                their livelihoods are improved as they strive for greater
+                productivity.
               </p>
             </div>
 
-            <ul className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {FEATURES.map((f) => (
-                <li key={f.title} className={`${BOX} rounded-2xl p-6`}>
-                  <div
-                    className={`${BOX} h-16 w-16 rounded-lg`}
-                    aria-hidden="true"
-                  />
-                  <h3 className="mt-6 text-lg font-bold">{f.title}</h3>
-                  <p className="mt-2">{f.text}</p>
-                  <a
-                    href="#schedule"
-                    className="mt-4 inline-block font-semibold"
-                  >
-                    Explore
-                  </a>
-                </li>
-              ))}
-            </ul>
+            <GalleryList items={FEATURES} />
           </div>
         </section>
 
         {/* speakers */}
-        <section id="speakers" className="border-t border-gray-400 py-20">
+        <section id="speakers" className="border-t border-white/10 py-24">
           <div className={WRAP}>
             <div className="flex flex-wrap items-end justify-between gap-6">
               <div>
                 <SectionLabel num="02" name="SPEAKERS" />
-                <h2 className="mt-4 text-4xl font-extrabold">
-                  Meet the Visionaries
+                <h2 className="mt-4 text-4xl font-extrabold sm:text-5xl">
+                  Minds Behind
+                  <span className="block text-white/60">Next</span>
                 </h2>
               </div>
-              <a
-                href="#speakers"
-                className={`${BOX} rounded-lg px-6 py-3 font-semibold`}
-              >
-                View All Speakers
-              </a>
             </div>
-
-            <ul className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {SPEAKERS.map((s) => (
-                <li
-                  key={s.name}
-                  className={`${BOX} flex flex-col items-center rounded-2xl p-6 text-center`}
-                >
-                  <span
-                    className={`${BOX} self-start rounded-full px-3 py-1 text-[11px] tracking-widest`}
-                  >
-                    {s.tag}
-                  </span>
-                  <div
-                    className={`${BOX} mt-2 h-24 w-24 rounded-full`}
-                    role="img"
-                    aria-label="Speaker avatar placeholder"
-                  />
-                  <h3 className="mt-5 text-lg font-bold">{s.name}</h3>
-                  <p className="text-sm">{s.role}</p>
-                  <hr className="my-4 w-full border-gray-400" />
-                  <p className="text-sm">{s.topic}</p>
-                </li>
-              ))}
-            </ul>
+            <SpeakerDirectory />
           </div>
         </section>
 
         {/* schedule */}
         <section id="schedule" className="border-t border-gray-400 py-20">
-          <div className={WRAP}>
-            <SectionLabel num="03" name="SCHEDULE" />
-            <h2 className="mt-4 text-4xl font-extrabold">
-              Two Days. Three Tracks.
-            </h2>
-
-            <div
-              className="mt-6 flex gap-3"
-              role="tablist"
-              aria-label="Event day"
-            >
-              {([1, 2] as const).map((d) => (
-                <button
-                  key={d}
-                  role="tab"
-                  aria-selected={day === d}
-                  onClick={() => setDay(d)}
-                  className={`${BOX} rounded-full px-6 py-2 text-sm font-semibold ${day === d ? "bg-gray-200" : ""}`}
-                >
-                  Day {d} — Mar {13 + d}
-                </button>
-              ))}
-            </div>
-
-            <div className="mt-8 overflow-x-auto pb-2">
-              <div
-                role="table"
-                aria-label={`Day ${day} schedule`}
-                className={`grid min-w-220 grid-cols-[10rem_minmax(0,3fr)_minmax(0,2fr)_minmax(0,2fr)] border-b border-r ${DOT}`}
-              >
-                <div role="row" className="contents">
-                  {["TIME", "SESSION", "TRACK", "SPEAKER"].map((h, i) => (
-                    <GridCell
-                      key={h}
-                      role="columnheader"
-                      right={i === 3}
-                      className="px-8 py-5 text-xs font-bold tracking-widest"
-                    >
-                      {h}
-                    </GridCell>
-                  ))}
-                </div>
-
-                {SCHEDULE[day].map((s, r, all) => {
-                  const last = r === all.length - 1;
-                  return (
-                    <div role="row" key={s.time + s.title} className="contents">
-                      <GridCell
-                        role="cell"
-                        bottom={last}
-                        className="px-8 py-5 text-lg font-bold"
-                      >
-                        <time>{s.time}</time>
-                      </GridCell>
-                      <GridCell role="cell" bottom={last} className="px-8 py-5">
-                        <h3 className="font-semibold">{s.title}</h3>
-                        <p className="text-sm">{s.meta}</p>
-                      </GridCell>
-                      <GridCell
-                        role="cell"
-                        bottom={last}
-                        className="flex items-center px-8 py-5"
-                      >
-                        <span className="rounded-full border border-gray-400 px-3 py-1 text-[11px] font-bold tracking-widest">
-                          {s.track}
-                        </span>
-                      </GridCell>
-                      <GridCell
-                        role="cell"
-                        right
-                        bottom={last}
-                        className="flex items-center gap-3 px-8 py-5"
-                      >
-                        <span
-                          className="h-9 w-9 shrink-0 rounded-full border border-gray-400"
-                          aria-hidden="true"
-                        />
-                        <span className="text-sm font-medium">{s.speaker}</span>
-                      </GridCell>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
+          <Schedule />
         </section>
 
         {/* faq */}

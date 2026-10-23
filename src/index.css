@@ -1,5 +1,17 @@
 @import "tailwindcss";
 
+html {
+   scrollbar-width: none;
+   /* Firefox */
+   -ms-overflow-style: none;
+   /* old Edge / IE */
+}
+
+html::-webkit-scrollbar {
+   display: none;
+   /* Chrome, Edge, Safari */
+}
+
 @property --amp {
    syntax: "<number>";
    inherits: true;

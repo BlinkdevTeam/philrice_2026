@@ -11,27 +11,51 @@ export const DETAILS = [
 ];
 
 export const STATS = [
-  { n: "50+", l: "Speakers" },
+  { n: "10+", l: "Speakers" },
   { n: "3", l: "Tracks" },
-  { n: "5,000", l: "Attendees" },
+  { n: "20+", l: "Exhibitors" },
 ];
 
 export const FEATURES = [
   {
     title: "AI & Intelligence",
     text: "Hands-on labs and keynotes on generative and agentic AI systems.",
+    image: "https://picsum.photos/seed/ugnay-ai/900/1200",
   },
   {
     title: "Spatial & AR",
     text: "Immersive demos of mixed reality and holographic interfaces.",
+    image: "https://picsum.photos/seed/ugnay-spatial/900/1200",
   },
   {
     title: "Quantum & Security",
     text: "Practical quantum and zero-trust sessions for developers.",
+    image: "https://picsum.photos/seed/ugnay-quantum/900/1200",
   },
   {
     title: "Robotics & Edge",
     text: "Edge platforms and machines moving AI into the physical world.",
+    image: "https://picsum.photos/seed/ugnay-robotics/900/1200",
+  },
+  {
+    title: "AI & Intelligence",
+    text: "Hands-on labs and keynotes on generative and agentic AI systems.",
+    image: "https://picsum.photos/seed/ugnay-ai/900/1200",
+  },
+  {
+    title: "Spatial & AR",
+    text: "Immersive demos of mixed reality and holographic interfaces.",
+    image: "https://picsum.photos/seed/ugnay-spatial/900/1200",
+  },
+  {
+    title: "Quantum & Security",
+    text: "Practical quantum and zero-trust sessions for developers.",
+    image: "https://picsum.photos/seed/ugnay-quantum/900/1200",
+  },
+  {
+    title: "Robotics & Edge",
+    text: "Edge platforms and machines moving AI into the physical world.",
+    image: "https://picsum.photos/seed/ugnay-robotics/900/1200",
   },
 ];
 
@@ -42,48 +66,56 @@ export const SPEAKERS = [
     role: "Chief AI Scientist, Helix Labs",
     topic: "Agentic systems that learn in the wild",
     tag: "AI",
+    image: "https://picsum.photos/seed/speaker-1/640/800",
   },
   {
     name: "Marcus Reyes",
     role: "Head of Spatial UX, Orbit",
     topic: "Designing interfaces for mixed reality",
     tag: "XR",
+    image: "https://picsum.photos/seed/speaker-1/640/800",
   },
   {
     name: "Priya Nair",
     role: "VP Quantum, QuBit",
     topic: "Practical quantum for developers",
     tag: "QUANTUM",
+    image: "https://picsum.photos/seed/speaker-1/640/800",
   },
   {
     name: "Elena Vasquez",
     role: "Robotics Lead, Atlas",
     topic: "Humanoids on the factory floor",
     tag: "ROBOTICS",
+    image: "https://picsum.photos/seed/speaker-1/640/800",
   },
   {
     name: "Jonas Weber",
     role: "CISO, Sentinel Net",
     topic: "Zero-trust in an AI-first world",
     tag: "SECURITY",
+    image: "https://picsum.photos/seed/speaker-1/640/800",
   },
   {
     name: "Sofia Lim",
     role: "Founder, Neon Studio",
     topic: "Generative worlds and creative code",
     tag: "CREATIVE",
+    image: "https://picsum.photos/seed/speaker-1/640/800",
   },
   {
     name: "Kenji Okada",
     role: "Principal Eng., EdgeCore",
     topic: "Intelligence at the edge, at scale",
     tag: "EDGE",
+    image: "https://picsum.photos/seed/speaker-1/640/800",
   },
   {
     name: "Amara Okafor",
     role: "Director, Future Cities Lab",
     topic: "Smart infrastructure for 2040",
     tag: "CITIES",
+    image: "https://picsum.photos/seed/speaker-1/640/800",
   },
 ];
 
