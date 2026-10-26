@@ -59,66 +59,6 @@ export const FEATURES = [
   },
 ];
 
-/* ---------- speakers ---------- */
-export const SPEAKERS = [
-  {
-    name: "Dr. Aiko Tanaka",
-    role: "Chief AI Scientist, Helix Labs",
-    topic: "Agentic systems that learn in the wild",
-    tag: "AI",
-    image: "https://picsum.photos/seed/speaker-1/640/800",
-  },
-  {
-    name: "Marcus Reyes",
-    role: "Head of Spatial UX, Orbit",
-    topic: "Designing interfaces for mixed reality",
-    tag: "XR",
-    image: "https://picsum.photos/seed/speaker-1/640/800",
-  },
-  {
-    name: "Priya Nair",
-    role: "VP Quantum, QuBit",
-    topic: "Practical quantum for developers",
-    tag: "QUANTUM",
-    image: "https://picsum.photos/seed/speaker-1/640/800",
-  },
-  {
-    name: "Elena Vasquez",
-    role: "Robotics Lead, Atlas",
-    topic: "Humanoids on the factory floor",
-    tag: "ROBOTICS",
-    image: "https://picsum.photos/seed/speaker-1/640/800",
-  },
-  {
-    name: "Jonas Weber",
-    role: "CISO, Sentinel Net",
-    topic: "Zero-trust in an AI-first world",
-    tag: "SECURITY",
-    image: "https://picsum.photos/seed/speaker-1/640/800",
-  },
-  {
-    name: "Sofia Lim",
-    role: "Founder, Neon Studio",
-    topic: "Generative worlds and creative code",
-    tag: "CREATIVE",
-    image: "https://picsum.photos/seed/speaker-1/640/800",
-  },
-  {
-    name: "Kenji Okada",
-    role: "Principal Eng., EdgeCore",
-    topic: "Intelligence at the edge, at scale",
-    tag: "EDGE",
-    image: "https://picsum.photos/seed/speaker-1/640/800",
-  },
-  {
-    name: "Amara Okafor",
-    role: "Director, Future Cities Lab",
-    topic: "Smart infrastructure for 2040",
-    tag: "CITIES",
-    image: "https://picsum.photos/seed/speaker-1/640/800",
-  },
-];
-
 /* ---------- schedule ---------- */
 export type SessionItem = {
   title: string;
@@ -138,281 +78,281 @@ export type Session = {
 
 export const SCHEDULE: Record<1 | 2 | 3, Session[]> = {
   1: [
-  {
-    time: "07:00",
-    title: "Registration of Participants and Welcome Coffee",
-    meta: "2 hrs",
-    track: "OPENING",
-  },
-  {
-    time: "09:00",
-    title: "Opening Program",
-    meta: "1 hr",
-    track: "OPENING",
-    items: [
-      { title: "Master of Ceremonies", speaker: "To be announced" },
-      { title: "Invocation", role: "Regions/SUCs" },
-      { title: "National Anthem" },
-      { title: "Iloilo Provincial Hymn" },
-      {
-        title: "Welcome Remarks",
-        speaker: "Governor Arthur Defensor Jr.",
-        role: "Governor, Province of Iloilo",
-      },
-      {
-        title: "Opening Message and Introduction of the Guests of Honor and Keynote Speaker",
-        speaker: "Dr. John C. de Leon",
-        role: "Executive Director, DA-PhilRice",
-      },
-      {
-        title: "Message",
-        speaker: "Secretary Francisco P. Tiu Laurel Jr.",
-        role: "Department of Agriculture (DA)",
-      },
-      {
-        title: "Message",
-        speaker: "Engr. Christopher V. Morales",
-        role: "Undersecretary for Rice Industry Development, DA",
-      },
-      {
-        title: "Message",
-        speaker: "Rep. Alfredo Abelardo Benitez",
-        role: "Deputy Speaker, House of Representatives",
-      },
-      { title: "Photo Opportunity and Knowledge Product Launching" },
-      { title: "Opening of e-Posters Exhibit" },
-    ],
-  },
-  {
-    time: "10:00",
-    title: "Networking Break",
-    meta: "15 min",
-    track: "NETWORKING",
-  },
-  {
-    time: "10:15",
-    title: "State of Rice in the Visayas",
-    meta: "Plenary Session 1 · 1 hr 45 min",
-    track: "PLENARY",
-    items: [
-      { title: "Chair", speaker: "Dr. Roel R. Suralta (for confirmation)" },
-      {
-        title: "Where Are We Now?",
-        speaker: "Ralph Alan C. Ceniza, FH Bordey, JC Beltran",
-        note: "What is the current state of rice production in the Visayas, and what are the major challenges that government and R&D institutions need to address?",
-      },
-      {
-        title: "What Does the Data Tell Us?",
-        speaker: "Dr. Lemuel Preciados",
-        role: "Department of Economics (Graduate Faculty), Visayas State University (VSU)",
-        note: "What do the socioeconomic data tell us about the real condition, competitiveness, and resilience of the Visayan rice sector?",
-      },
-      {
-        title: "Who Are We Doing This For?",
-        speaker: "Hazel Tanchuling",
-        role: "RWAN",
-        note: "Are our current rice research, policies, technologies, and programs solving the problems that farmers actually experience?",
-      },
-      { title: "Open Forum / Q&A" },
-    ],
-  },
-  {
-    time: "12:00",
-    title: "Lunch Break",
-    meta: "1 hr",
-    track: "NETWORKING",
-  },
-  {
-    time: "13:00",
-    title: "Bridging the Gaps: Responding to the Visayas Rice Situation",
-    meta: "Panel Discussion 1 · 2 hrs",
-    track: "PANEL",
-    items: [
-      { title: "Moderator", speaker: "Dr. Jennifer T. Niones (for confirmation)" },
-      { title: "Panelist", speaker: "Dr. Yvonne Pinto", role: "IRRI representative" },
-      { title: "Panelist", speaker: "Dir. Remelyn Recoter", role: "ATI" },
-      { title: "Panelist", speaker: "Dr. Karen Eloisa T. Barroga", role: "DA-PhilRice" },
-      { title: "Panelist", speaker: "Mr. Geron Magbanua", role: "OIC PA, Iloilo" },
-    ],
-  },
-  {
-    time: "15:00",
-    title: "Concurrent Sessions",
-    meta: "Parallel themes · Iloilo City",
-    track: "CONCURRENT",
-    items: [
-      { title: "Theme 1: Rice Variety Innovation" },
-      { title: "Theme 2: Smart Crop, Soil, Farm Systems, and Mechanization" },
-    ],
-  },
-  {
-    time: "18:00",
-    title: "Welcome Dinner",
-    meta: "Iloilo City",
-    track: "NETWORKING",
-  },
-],
+    {
+      time: "07:00",
+      title: "Registration of Participants and Welcome Coffee",
+      meta: "2 hrs",
+      track: "OPENING",
+    },
+    {
+      time: "09:00",
+      title: "Opening Program",
+      meta: "1 hr",
+      track: "OPENING",
+      items: [
+        { title: "Master of Ceremonies", speaker: "To be announced" },
+        { title: "Invocation", role: "Regions/SUCs" },
+        { title: "National Anthem" },
+        { title: "Iloilo Provincial Hymn" },
+        {
+          title: "Welcome Remarks",
+          speaker: "Governor Arthur Defensor Jr.",
+          role: "Governor, Province of Iloilo",
+        },
+        {
+          title: "Opening Message and Introduction of the Guests of Honor and Keynote Speaker",
+          speaker: "Dr. John C. de Leon",
+          role: "Executive Director, DA-PhilRice",
+        },
+        {
+          title: "Message",
+          speaker: "Secretary Francisco P. Tiu Laurel Jr.",
+          role: "Department of Agriculture (DA)",
+        },
+        {
+          title: "Message",
+          speaker: "Engr. Christopher V. Morales",
+          role: "Undersecretary for Rice Industry Development, DA",
+        },
+        {
+          title: "Message",
+          speaker: "Rep. Alfredo Abelardo Benitez",
+          role: "Deputy Speaker, House of Representatives",
+        },
+        { title: "Photo Opportunity and Knowledge Product Launching" },
+        { title: "Opening of e-Posters Exhibit" },
+      ],
+    },
+    {
+      time: "10:00",
+      title: "Networking Break",
+      meta: "15 min",
+      track: "NETWORKING",
+    },
+    {
+      time: "10:15",
+      title: "State of Rice in the Visayas",
+      meta: "Plenary Session 1 · 1 hr 45 min",
+      track: "PLENARY",
+      items: [
+        { title: "Chair", speaker: "Dr. Roel R. Suralta (for confirmation)" },
+        {
+          title: "Where Are We Now?",
+          speaker: "Ralph Alan C. Ceniza, FH Bordey, JC Beltran",
+          note: "What is the current state of rice production in the Visayas, and what are the major challenges that government and R&D institutions need to address?",
+        },
+        {
+          title: "What Does the Data Tell Us?",
+          speaker: "Dr. Lemuel Preciados",
+          role: "Department of Economics (Graduate Faculty), Visayas State University (VSU)",
+          note: "What do the socioeconomic data tell us about the real condition, competitiveness, and resilience of the Visayan rice sector?",
+        },
+        {
+          title: "Who Are We Doing This For?",
+          speaker: "Hazel Tanchuling",
+          role: "RWAN",
+          note: "Are our current rice research, policies, technologies, and programs solving the problems that farmers actually experience?",
+        },
+        { title: "Open Forum / Q&A" },
+      ],
+    },
+    {
+      time: "12:00",
+      title: "Lunch Break",
+      meta: "1 hr",
+      track: "NETWORKING",
+    },
+    {
+      time: "13:00",
+      title: "Bridging the Gaps: Responding to the Visayas Rice Situation",
+      meta: "Panel Discussion 1 · 2 hrs",
+      track: "PANEL",
+      items: [
+        { title: "Moderator", speaker: "Dr. Jennifer T. Niones (for confirmation)" },
+        { title: "Panelist", speaker: "Dr. Yvonne Pinto", role: "IRRI representative" },
+        { title: "Panelist", speaker: "Dir. Remelyn Recoter", role: "ATI" },
+        { title: "Panelist", speaker: "Dr. Karen Eloisa T. Barroga", role: "DA-PhilRice" },
+        { title: "Panelist", speaker: "Mr. Geron Magbanua", role: "OIC PA, Iloilo" },
+      ],
+    },
+    {
+      time: "15:00",
+      title: "Concurrent Sessions",
+      meta: "Parallel themes · Iloilo City",
+      track: "CONCURRENT",
+      items: [
+        { title: "Theme 1: Rice Variety Innovation" },
+        { title: "Theme 2: Smart Crop, Soil, Farm Systems, and Mechanization" },
+      ],
+    },
+    {
+      time: "18:00",
+      title: "Welcome Dinner",
+      meta: "Iloilo City",
+      track: "NETWORKING",
+    },
+  ],
   2: [
-  {
-    time: "07:00",
-    title: "Morning Coffee and Networking",
-    meta: "1 hr",
-    track: "NETWORKING",
-  },
-  {
-    time: "08:00",
-    title: "Recap of Day 1 / Preliminaries",
-    meta: "30 min",
-    track: "OPENING",
-  },
-  {
-    time: "08:30",
-    title: "Scaling Rice Innovations in the Visayas",
-    meta: "Plenary Session 2 · 1 hr 30 min",
-    track: "PLENARY",
-    items: [
-      { title: "Chair", speaker: "To be announced" },
-      {
-        title: "Technology Scaling in Visayas (SRI, Heirloom, Palayamanan, and AgroEcology)",
-        speaker: "Dr. Alvin D. Palanog",
-      },
-      {
-        title: "Converging for Impact: Connecting Farmers, Science, Government, and Industry",
-        speaker: "Zaldy M. Boloron",
-        role: "Regional Technical Director for Research and Regulations, Department of Agriculture - Negros Island Region (DA-RFO NIR)",
-        note: "How can farmers, researchers, government, academe, and the private sector work together to accelerate the adoption of rice innovations?",
-      },
-      {
-        title: "Building the Visayas Rice Innovation Ecosystem",
-        speaker: "Erica Jane Hadlocon or Rian Kierre Golez",
-        role: "Agribnv - Farm Stays & Agricultural Experiences",
-        note: "What regional platforms and mechanisms are needed to connect innovations, knowledge, data, financing, and markets across the Visayas?",
-      },
-      {
-        title: "Enabling Scale: Policy, Financing, and Investment for Rice Innovation",
-        speaker: "Zarlina B. Cuello",
-        role: "Regional Technical Director for Research and Regulations, Department of Agriculture–Western Visayas (DA-RFO VI)",
-        note: "What policies, financing mechanisms, and investments are needed to move rice innovations from promising projects to sustainable, large-scale adoption?",
-      },
-      { title: "Open Forum / Q&A" },
-    ],
-  },
-  {
-    time: "10:00",
-    title: "Concurrent Sessions",
-    meta: "Parallel themes · Iloilo City",
-    track: "CONCURRENT",
-    items: [
-      { title: "Theme 3: Rice-Based Value and Food Innovations" },
-      { title: "Theme 4: Cross-Cutting Solutions" },
-    ],
-  },
-  {
-    time: "12:00",
-    title: "Lunch Break",
-    meta: "2 hrs 30 min",
-    track: "NETWORKING",
-  },
-  {
-    time: "14:30",
-    title: "Presenting the Convergence Plan for the Visayas Rice Agenda",
-    meta: "Plenary Session 3",
-    track: "PLENARY",
-    items: [
-      { title: "Chair", speaker: "To be announced" },
-      { title: "Rise Visayas (RiceANI)", speaker: "O Abdulkadil" },
-      {
-        title: "Academe",
-        speaker: "Dr. Pauline S. Caintic",
-        role: "Head, Visayas Consortium for Agriculture, Aquatic and Resources Programs (ViCARP)",
-      },
-      {
-        title: "Convergence",
-        speaker: "Dr. Rex L. Navarro",
-        role: "Includes NIA and BSWM",
-      },
-      {
-        title: "Commitment Signing: Research Consortia",
-        role: "WESVIARC, VICAARP, WESVAARRDEC, CVAARRDEC",
-      },
-      { title: "Commitment Signing: BSWM", speaker: "To be announced" },
-      { title: "Commitment Signing: NIA", speaker: "To be announced" },
-      {
-        title: "Commitment Signing: DA, RFOs, and Attached Agencies",
-        speaker: "Dennis R. Arpia",
-        role: "Regional Executive Director, Department of Agriculture - Western Visayas (DA-RFO VI)",
-      },
-      {
-        title: "Commitment Signing: DA, RFOs, and Attached Agencies",
-        speaker: "Angel C. Enriquez, CESO III",
-        role: "Regional Executive Director, Department of Agriculture - Central Visayas (DA-RFO VII)",
-      },
-      {
-        title: "Commitment Signing: DA, RFOs, and Attached Agencies",
-        speaker: "Rodel G. Macapañas",
-        role: "OIC-Regional Executive Director, Department of Agriculture - Eastern Visayas (DA-RFO VIII)",
-      },
-      {
-        title: "Commitment Signing: DA, RFOs, and Attached Agencies",
-        speaker: "Engr. Jose Albert A. Barrogo",
-        role: "Regional Executive Director, Department of Agriculture - Negros Island Region (DA-RFO NIR)",
-      },
-      {
-        title: "Commitment Signing: International Organization/Agency",
-        speaker: "Dr. Yvonne Pinto",
-        role: "Director General, International Rice Research Institute",
-      },
-      { title: "Commitment Signing: Local Government", speaker: "To be announced" },
-      {
-        title: "Commitment Signing: Non-Government Organization/Civil Society Organization",
-        speaker: "To be announced",
-      },
-      { title: "Commitment Signing: Private Company", speaker: "To be announced" },
-      {
-        title: "Commitment Signing: Seed Growers' Cooperative",
-        speaker: "Hernan M. Samson",
-        role: "Chairperson, Quezon Codcod RiceBIS Farmers Agriculture Cooperative",
-      },
-      { title: "Open Forum / Q&A" },
-      { title: "Ceremonial Commitment Signing" },
-      { title: "Adoption of the Convergence Plan for the Visayas Rice Agenda" },
-      { title: "Synthesis (SDE)", speaker: "Mr. Joselito A. Kalaw" },
-    ],
-  },
-  {
-    time: "TBA",
-    title: "Networking Break",
-    meta: "",
-    track: "NETWORKING",
-  },
-  {
-    time: "TBA",
-    title: "Fellowship and Governor's Night",
-    meta: "Closing program",
-    track: "CLOSING",
-    items: [
-      { title: "Masters of Ceremonies", speaker: "To be announced" },
-      { title: "Recognition and Awarding of Best Posters" },
-      {
-        title: "Closing Message and Vote of Thanks",
-        speaker: "Dr. John C. de Leon",
-        role: "Executive Director, DA-PhilRice",
-      },
-      { title: "DA-PhilRice Jingle" },
-    ],
-  },
-],
+    {
+      time: "07:00",
+      title: "Morning Coffee and Networking",
+      meta: "1 hr",
+      track: "NETWORKING",
+    },
+    {
+      time: "08:00",
+      title: "Recap of Day 1 / Preliminaries",
+      meta: "30 min",
+      track: "OPENING",
+    },
+    {
+      time: "08:30",
+      title: "Scaling Rice Innovations in the Visayas",
+      meta: "Plenary Session 2 · 1 hr 30 min",
+      track: "PLENARY",
+      items: [
+        { title: "Chair", speaker: "To be announced" },
+        {
+          title: "Technology Scaling in Visayas (SRI, Heirloom, Palayamanan, and AgroEcology)",
+          speaker: "Dr. Alvin D. Palanog",
+        },
+        {
+          title: "Converging for Impact: Connecting Farmers, Science, Government, and Industry",
+          speaker: "Zaldy M. Boloron",
+          role: "Regional Technical Director for Research and Regulations, Department of Agriculture - Negros Island Region (DA-RFO NIR)",
+          note: "How can farmers, researchers, government, academe, and the private sector work together to accelerate the adoption of rice innovations?",
+        },
+        {
+          title: "Building the Visayas Rice Innovation Ecosystem",
+          speaker: "Erica Jane Hadlocon or Rian Kierre Golez",
+          role: "Agribnv - Farm Stays & Agricultural Experiences",
+          note: "What regional platforms and mechanisms are needed to connect innovations, knowledge, data, financing, and markets across the Visayas?",
+        },
+        {
+          title: "Enabling Scale: Policy, Financing, and Investment for Rice Innovation",
+          speaker: "Zarlina B. Cuello",
+          role: "Regional Technical Director for Research and Regulations, Department of Agriculture–Western Visayas (DA-RFO VI)",
+          note: "What policies, financing mechanisms, and investments are needed to move rice innovations from promising projects to sustainable, large-scale adoption?",
+        },
+        { title: "Open Forum / Q&A" },
+      ],
+    },
+    {
+      time: "10:00",
+      title: "Concurrent Sessions",
+      meta: "Parallel themes · Iloilo City",
+      track: "CONCURRENT",
+      items: [
+        { title: "Theme 3: Rice-Based Value and Food Innovations" },
+        { title: "Theme 4: Cross-Cutting Solutions" },
+      ],
+    },
+    {
+      time: "12:00",
+      title: "Lunch Break",
+      meta: "2 hrs 30 min",
+      track: "NETWORKING",
+    },
+    {
+      time: "14:30",
+      title: "Presenting the Convergence Plan for the Visayas Rice Agenda",
+      meta: "Plenary Session 3",
+      track: "PLENARY",
+      items: [
+        { title: "Chair", speaker: "To be announced" },
+        { title: "Rise Visayas (RiceANI)", speaker: "O Abdulkadil" },
+        {
+          title: "Academe",
+          speaker: "Dr. Pauline S. Caintic",
+          role: "Head, Visayas Consortium for Agriculture, Aquatic and Resources Programs (ViCARP)",
+        },
+        {
+          title: "Convergence",
+          speaker: "Dr. Rex L. Navarro",
+          role: "Includes NIA and BSWM",
+        },
+        {
+          title: "Commitment Signing: Research Consortia",
+          role: "WESVIARC, VICAARP, WESVAARRDEC, CVAARRDEC",
+        },
+        { title: "Commitment Signing: BSWM", speaker: "To be announced" },
+        { title: "Commitment Signing: NIA", speaker: "To be announced" },
+        {
+          title: "Commitment Signing: DA, RFOs, and Attached Agencies",
+          speaker: "Dennis R. Arpia",
+          role: "Regional Executive Director, Department of Agriculture - Western Visayas (DA-RFO VI)",
+        },
+        {
+          title: "Commitment Signing: DA, RFOs, and Attached Agencies",
+          speaker: "Angel C. Enriquez, CESO III",
+          role: "Regional Executive Director, Department of Agriculture - Central Visayas (DA-RFO VII)",
+        },
+        {
+          title: "Commitment Signing: DA, RFOs, and Attached Agencies",
+          speaker: "Rodel G. Macapañas",
+          role: "OIC-Regional Executive Director, Department of Agriculture - Eastern Visayas (DA-RFO VIII)",
+        },
+        {
+          title: "Commitment Signing: DA, RFOs, and Attached Agencies",
+          speaker: "Engr. Jose Albert A. Barrogo",
+          role: "Regional Executive Director, Department of Agriculture - Negros Island Region (DA-RFO NIR)",
+        },
+        {
+          title: "Commitment Signing: International Organization/Agency",
+          speaker: "Dr. Yvonne Pinto",
+          role: "Director General, International Rice Research Institute",
+        },
+        { title: "Commitment Signing: Local Government", speaker: "To be announced" },
+        {
+          title: "Commitment Signing: Non-Government Organization/Civil Society Organization",
+          speaker: "To be announced",
+        },
+        { title: "Commitment Signing: Private Company", speaker: "To be announced" },
+        {
+          title: "Commitment Signing: Seed Growers' Cooperative",
+          speaker: "Hernan M. Samson",
+          role: "Chairperson, Quezon Codcod RiceBIS Farmers Agriculture Cooperative",
+        },
+        { title: "Open Forum / Q&A" },
+        { title: "Ceremonial Commitment Signing" },
+        { title: "Adoption of the Convergence Plan for the Visayas Rice Agenda" },
+        { title: "Synthesis (SDE)", speaker: "Mr. Joselito A. Kalaw" },
+      ],
+    },
+    {
+      time: "TBA",
+      title: "Networking Break",
+      meta: "",
+      track: "NETWORKING",
+    },
+    {
+      time: "TBA",
+      title: "Fellowship and Governor's Night",
+      meta: "Closing program",
+      track: "CLOSING",
+      items: [
+        { title: "Masters of Ceremonies", speaker: "To be announced" },
+        { title: "Recognition and Awarding of Best Posters" },
+        {
+          title: "Closing Message and Vote of Thanks",
+          speaker: "Dr. John C. de Leon",
+          role: "Executive Director, DA-PhilRice",
+        },
+        { title: "DA-PhilRice Jingle" },
+      ],
+    },
+  ],
   3: [
-  {
-    time: "07:00",
-    title: "Learning Journey and Technology Exposure",
-    meta: "7:00 AM – 12:00 NN · Coordinated by the Regions",
-    track: "FIELD VISIT",
-    items: [
-      { title: "Learning sites and facilitators", role: "To be announced" },
-    ],
-  },
-],
+    {
+      time: "07:00",
+      title: "Learning Journey and Technology Exposure",
+      meta: "7:00 AM – 12:00 NN · Coordinated by the Regions",
+      track: "FIELD VISIT",
+      items: [
+        { title: "Learning sites and facilitators", role: "To be announced" },
+      ],
+    },
+  ],
 };
 
 /* ---------- faq ---------- */
