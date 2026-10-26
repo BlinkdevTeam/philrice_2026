@@ -110,7 +110,7 @@ function CompactCard({ s, onOpen }: { s: Speaker; onOpen: () => void }) {
         aria-haspopup="dialog"
         className="flex w-full cursor-pointer items-center gap-3 rounded-xl p-3 text-left outline-none focus-visible:ring-2 focus-visible:ring-[#4d9cff]"
       >
-        <div className="relative h-28 w-28 shrink-0 overflow-hidden rounded-full bg-[#0b1b3d] ring-1 ring-white/15 transition group-hover:ring-[#4d9cff]/60">
+        <div className="relative h-36 w-36 shrink-0 overflow-hidden rounded-full bg-[#0b1b3d] ring-1 ring-white/15 transition group-hover:ring-[#4d9cff]/60">
           <Photo s={s} textSize="text-base" />
         </div>
         <div className="min-w-0 flex-1">
