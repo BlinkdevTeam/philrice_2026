@@ -6,6 +6,7 @@ import { SCHEDULE } from "./data"; // adjust
 const DAYS = [
   { id: 1, label: "Day 1", date: "Nov 23" },
   { id: 2, label: "Day 2", date: "Nov 24" },
+  { id: 3, label: "Day 3", date: "Nov 25" },
 ] as const;
 
 type DayId = (typeof DAYS)[number]["id"];
@@ -43,7 +44,7 @@ export default function Schedule() {
       <div className={WRAP}>
         <SectionLabel num="03" name="SCHEDULE" />
         <h2 className="mt-4 text-4xl font-extrabold sm:text-5xl">
-          Two Days.
+          Three Days.
           <span className="block text-white/60">Three Tracks.</span>
         </h2>
 

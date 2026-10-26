@@ -9,6 +9,7 @@ import {
 import "./App.css";
 // import { motion } from "framer-motion";
 import { WRAP, SectionLabel } from "./ui"; // adjust
+import { Mail, Plus } from "lucide-react";
 
 import Header from "./Header";
 import GalleryList from "./GalleryList";
@@ -34,18 +35,6 @@ import lockAnimated from "./assets/lock-animated.svg?raw";
 import daPHILRICE from "./assets/da-philrice.png";
 import BagongPilipinas from "./assets/bagong-pilipinas.png";
 import UgnayPalay from "./assets/ugnay-palay-logo.png";
-
-/* ---------- layout helpers ---------- */
-// const WRAP = "mx-auto w-full max-w-[1280px] px-6";
-const BOX = "border border-gray-400";
-
-// function SectionLabel({ num, name }: { num: string; name: string }) {
-//   return (
-//     <p className="text-sm font-semibold tracking-widest">
-//       {num} / {name}
-//     </p>
-//   );
-// }
 
 /* ---------- dotted grid (schedule + footer) ---------- */
 const DOT = "border-dotted border-gray-500";
@@ -334,7 +323,7 @@ export default function App() {
           </div>
 
           <div
-            className="group relative translate-x-20"
+            className="group relative lg:translate-x-20"
             onMouseEnter={() => {
               setHover(true);
               playRange(HOVER.from, HOVER.to);
@@ -432,64 +421,97 @@ export default function App() {
         </section>
 
         {/* schedule */}
-        <section id="schedule" className="border-t border-gray-400 py-20">
+        <section id="schedule" className="">
           <Schedule />
         </section>
 
         {/* faq */}
-        <section id="faq" className="border-t border-gray-400 py-20">
-          <div className={`${WRAP} grid gap-12 lg:grid-cols-[1fr_2fr]`}>
-            <div>
+        <section id="faq" className="border-t border-white/10 py-24">
+          <div
+            className={`${WRAP} grid gap-12 lg:grid-cols-[1fr_2fr] lg:gap-16`}
+          >
+            {/* left: stays in view while the list scrolls */}
+            <div className="lg:sticky lg:top-24 lg:self-start">
               <SectionLabel num="04" name="FAQ" />
-              <h2 className="mt-4 text-4xl font-extrabold leading-tight">
+              <h2 className="mt-4 text-4xl font-extrabold leading-tight sm:text-5xl">
                 Questions,
-                <br />
-                answered.
+                <span className="block text-white/60">answered.</span>
               </h2>
-              <p className="mt-6 max-w-xs">
+              <p className="mt-6 max-w-xs leading-7 text-white/60">
                 Can’t find what you’re looking for? Our team replies within 24
                 hours.
               </p>
               <a
                 href="mailto:hello@EVENT2027.example"
-                className={`${BOX} mt-8 inline-block rounded-lg px-8 py-3 font-semibold`}
+                className="group mt-8 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-6 py-3 text-sm font-semibold text-white backdrop-blur-md transition-colors hover:border-[#4d9cff]/50 hover:bg-white/10"
               >
+                <Mail className="h-4 w-4 text-[#4d9cff]" aria-hidden="true" />
                 Contact Us
               </a>
             </div>
 
-            <ul className="space-y-4">
+            {/* right: accordion */}
+            <ul className="space-y-3">
               {FAQS.map((f, i) => {
                 const isOpen = open === i;
                 return (
-                  <li key={f.q} className={`${BOX} rounded-xl`}>
+                  <li
+                    key={f.q}
+                    className={`rounded-2xl border transition duration-300 ${
+                      isOpen
+                        ? "border-[#4d9cff]/40 bg-white/[0.07] shadow-[0_0_40px_-14px_rgba(77,156,255,0.5)]"
+                        : "border-white/10 bg-white/5 hover:border-white/25"
+                    }`}
+                  >
                     <h3>
                       <button
                         id={`faq-btn-${i}`}
+                        type="button"
                         aria-expanded={isOpen}
                         aria-controls={`faq-panel-${i}`}
                         onClick={() => setOpen(isOpen ? null : i)}
-                        className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left font-semibold"
+                        className="flex w-full items-center gap-4 rounded-2xl px-5 py-5 text-left outline-none focus-visible:ring-2 focus-visible:ring-[#4d9cff] sm:px-6"
                       >
-                        {f.q}
                         <span
-                          className={`${BOX} grid h-8 w-8 shrink-0 place-items-center rounded-full`}
-                          aria-hidden="true"
+                          className={`font-mono text-xs transition-colors ${
+                            isOpen ? "text-[#4d9cff]" : "text-white/40"
+                          }`}
                         >
-                          {isOpen ? "−" : "+"}
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <span className="flex-1 font-semibold text-white">
+                          {f.q}
+                        </span>
+                        <span
+                          aria-hidden="true"
+                          className={`grid h-8 w-8 shrink-0 place-items-center rounded-full border transition duration-300 ${
+                            isOpen
+                              ? "rotate-45 border-[#4d9cff]/60 bg-[#4d9cff]/15 text-[#4d9cff]"
+                              : "border-white/15 text-white/60"
+                          }`}
+                        >
+                          <Plus className="h-4 w-4" />
                         </span>
                       </button>
                     </h3>
-                    {isOpen && (
-                      <div
-                        id={`faq-panel-${i}`}
-                        role="region"
-                        aria-labelledby={`faq-btn-${i}`}
-                        className="border-t border-gray-400 px-6 py-4"
-                      >
-                        {f.a}
+
+                    {/* smooth height: animates the grid row from 0fr to 1fr */}
+                    <div
+                      id={`faq-panel-${i}`}
+                      role="region"
+                      aria-labelledby={`faq-btn-${i}`}
+                      className={`grid transition-[grid-template-rows,visibility] duration-300 ease-out motion-reduce:transition-none ${
+                        isOpen
+                          ? "visible grid-rows-[1fr]"
+                          : "invisible grid-rows-[0fr]"
+                      }`}
+                    >
+                      <div className="overflow-hidden">
+                        <p className="border-t border-white/10 px-5 py-5 leading-7 text-white/70 sm:px-6 sm:pl-[4.25rem]">
+                          {f.a}
+                        </p>
                       </div>
-                    )}
+                    </div>
                   </li>
                 );
               })}
@@ -499,162 +521,156 @@ export default function App() {
       </main>
 
       {/* footer */}
-      <footer className="py-16">
-        <div className={WRAP}>
-          <div
-            className={`grid grid-cols-1 border-b border-r lg:grid-cols-4 ${DOT}`}
+      <footer className="pt-16">
+        <div
+          className={`grid grid-cols-1 border-b border-r lg:grid-cols-4 ${DOT}`}
+        >
+          {/* row 1 — link columns */}
+          {FOOT_COLS.map((c, i) => (
+            <GridCell key={c.title} right={i === 3} className="min-h-62.5 p-8">
+              <h2 className="text-2xl">{c.title}</h2>
+              <ul className={`mt-5 ${LINK_STYLE}`}>
+                {c.links.map((l) => (
+                  <li key={l.label}>
+                    <a
+                      href={l.href}
+                      className="flex items-center justify-between"
+                    >
+                      {l.label}
+                      {l.plus && (
+                        <span aria-hidden="true" className="pr-3">
+                          +
+                        </span>
+                      )}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </GridCell>
+          ))}
+
+          {/* row 2 — logo, legal, address */}
+          <GridCell
+            extra={["tc", "bc"]}
+            className="flex min-h-87.5 items-center justify-center p-8 lg:col-span-2"
           >
-            {/* row 1 — link columns */}
-            {FOOT_COLS.map((c, i) => (
-              <GridCell
-                key={c.title}
-                right={i === 3}
-                className="min-h-62.5 p-8"
-              >
-                <h2 className="text-2xl">{c.title}</h2>
-                <ul className={`mt-5 ${LINK_STYLE}`}>
-                  {c.links.map((l) => (
-                    <li key={l.label}>
-                      <a
-                        href={l.href}
-                        className="flex items-center justify-between"
-                      >
-                        {l.label}
-                        {l.plus && (
-                          <span aria-hidden="true" className="pr-3">
-                            +
-                          </span>
-                        )}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </GridCell>
-            ))}
-
-            {/* row 2 — logo, legal, address */}
-            <GridCell
-              extra={["tc", "bc"]}
-              className="flex min-h-87.5 items-center justify-center p-8 lg:col-span-2"
+            <div className="flex h-11 w-full items-center justify-center">
+              <img
+                src={daPHILRICE}
+                alt="DAPHILRICE"
+                className="h-116 w-116 object-contain"
+              />
+            </div>
+          </GridCell>
+          <GridCell className="flex min-h-87.5 items-center justify-center p-8 lg:col-span-1">
+            <div className="flex h-11 w-full items-center justify-center">
+              <img
+                src={BagongPilipinas}
+                alt="BagongPilipinas"
+                className="h-36 w-36 object-contain"
+              />
+            </div>
+          </GridCell>
+          <GridCell right className="min-h-87.5 p-8">
+            <h2 className="text-2xl">PHILRICE</h2>
+            <address className={`mt-5 not-italic ${LINK_STYLE}`}>
+              <p>Iloilo Convention Center</p>
+              <p>Iloilo City, Philippines</p>
+            </address>
+            <div
+              className="mt-8 grid h-24 w-24 place-items-center"
+              role="img"
+              aria-label="Badge placeholder"
             >
-              <div className="flex h-11 w-full items-center justify-center">
-                <img
-                  src={daPHILRICE}
-                  alt="DAPHILRICE"
-                  className="h-116 w-116 object-contain"
-                />
-              </div>
-            </GridCell>
-            <GridCell className="flex min-h-87.5 items-center justify-center p-8 lg:col-span-1">
-              <div className="flex h-11 w-full items-center justify-center">
-                <img
-                  src={BagongPilipinas}
-                  alt="BagongPilipinas"
-                  className="h-36 w-36 object-contain"
-                />
-              </div>
-            </GridCell>
-            <GridCell right className="min-h-87.5 p-8">
-              <h2 className="text-2xl">PHILRICE</h2>
-              <address className={`mt-5 not-italic ${LINK_STYLE}`}>
-                <p>Iloilo Convention Center</p>
-                <p>Iloilo City, Philippines</p>
-              </address>
-              <div
-                className="mt-8 grid h-24 w-24 place-items-center"
-                role="img"
-                aria-label="Badge placeholder"
-              >
-                <img
-                  src={UgnayPalay}
-                  alt="UgnayPalay"
-                  className="h-24 w-24 object-contain"
-                />
-              </div>
-            </GridCell>
+              <img
+                src={UgnayPalay}
+                alt="UgnayPalay"
+                className="h-24 w-24 object-contain"
+              />
+            </div>
+          </GridCell>
 
-            <GridCell bottom className="flex min-h-36.25 items-center p-8">
-              <a
-                href="https://www.facebook.com/PhilRice.ricematters"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex h-11 w-full items-center justify-center"
-                aria-label="Visit our Facebook page"
-              >
-                <img
-                  src={facebookLogo}
-                  alt="Facebook"
-                  className="h-28 w-28 object-contain transition-transform duration-300 ease-out will-change-transform group-hover:scale-105 group-active:scale-95 motion-reduce:transition-none"
-                />
-              </a>
-            </GridCell>
+          <GridCell bottom className="flex min-h-36.25 items-center p-8">
+            <a
+              href="https://www.facebook.com/PhilRice.ricematters"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex h-11 w-full items-center justify-center"
+              aria-label="Visit our Facebook page"
+            >
+              <img
+                src={facebookLogo}
+                alt="Facebook"
+                className="h-31 w-31 object-contain transition-transform duration-300 ease-out will-change-transform group-hover:scale-105 group-active:scale-95 motion-reduce:transition-none"
+              />
+            </a>
+          </GridCell>
 
-            <GridCell bottom className="flex min-h-36.25 items-center p-8">
-              <a
-                href="https://www.facebook.com/PhilRice.ricematters"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex h-11 w-full items-center justify-center"
-                aria-label="Visit our Facebook page"
-              >
-                <img
-                  src={youtubeLogo}
-                  alt="Youtube"
-                  className="h-28 w-28 object-contain transition-transform duration-300 ease-out will-change-transform group-hover:scale-105 group-active:scale-95 motion-reduce:transition-none"
-                />
-              </a>
-            </GridCell>
-            <GridCell bottom className="flex min-h-36.25 items-center p-8">
-              <button
-                type="button"
-                onClick={handleCopyEmail}
-                className="group relative flex h-11 w-full cursor-pointer items-center justify-center"
-                aria-label="Copy email address"
-              >
-                <img
-                  src={gmailLogo}
-                  alt="Gmail"
-                  className={`h-10 w-10 object-contain transition-transform duration-200 ease-out group-hover:scale-110 group-active:scale-90 ${
-                    emailCopied ? "scale-110" : ""
-                  }`}
-                />
+          <GridCell bottom className="flex min-h-36.25 items-center p-8">
+            <a
+              href="https://www.facebook.com/PhilRice.ricematters"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex h-11 w-full items-center justify-center"
+              aria-label="Visit our Facebook page"
+            >
+              <img
+                src={youtubeLogo}
+                alt="Youtube"
+                className="h-28 w-28 object-contain transition-transform duration-300 ease-out will-change-transform group-hover:scale-105 group-active:scale-95 motion-reduce:transition-none"
+              />
+            </a>
+          </GridCell>
+          <GridCell bottom className="flex min-h-36.25 items-center p-8">
+            <button
+              type="button"
+              onClick={handleCopyEmail}
+              className="group relative flex h-11 w-full cursor-pointer items-center justify-center"
+              aria-label="Copy email address"
+            >
+              <img
+                src={gmailLogo}
+                alt="Gmail"
+                className={`h-10 w-10 object-contain transition-transform duration-200 ease-out group-hover:scale-110 group-active:scale-90 ${
+                  emailCopied ? "scale-110" : ""
+                }`}
+              />
 
-                {/* Pop-up tooltip */}
-                <span
-                  role="status"
-                  aria-live="polite"
-                  className={`pointer-events-none absolute left-1/2 flex -translate-x-1/2 items-center gap-1.5 whitespace-nowrap rounded-md bg-black px-3 py-2 text-xs font-medium text-white shadow-lg transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
-                    emailCopied
-                      ? "-top-12 scale-100 opacity-100"
-                      : "-top-6 scale-50 opacity-0"
-                  }`}
+              {/* Pop-up tooltip */}
+              <span
+                role="status"
+                aria-live="polite"
+                className={`pointer-events-none absolute left-1/2 flex -translate-x-1/2 items-center gap-1.5 whitespace-nowrap rounded-md bg-black px-3 py-2 text-xs font-medium text-white shadow-lg transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
+                  emailCopied
+                    ? "-top-12 scale-100 opacity-100"
+                    : "-top-6 scale-50 opacity-0"
+                }`}
+              >
+                <svg
+                  className="h-3.5 w-3.5 text-green-400"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 >
-                  <svg
-                    className="h-3.5 w-3.5 text-green-400"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M20 6 9 17l-5-5" />
-                  </svg>
-                  Email copied!
-                  {/* little arrow */}
-                  <span className="absolute -bottom-1 left-1/2 h-2 w-2 -translate-x-1/2 rotate-45 bg-black" />
-                </span>
-              </button>
-            </GridCell>
-            <GridCell
-              right
-              bottom
-              className="flex min-h-36.25 flex-col justify-center gap-1.5 p-8 text-sm font-medium"
-            >
-              <p>© 2026 PHILRICE</p>
-              <p>All rights reserved.</p>
-            </GridCell>
-          </div>
+                  <path d="M20 6 9 17l-5-5" />
+                </svg>
+                Email copied!
+                {/* little arrow */}
+                <span className="absolute -bottom-1 left-1/2 h-2 w-2 -translate-x-1/2 rotate-45 bg-black" />
+              </span>
+            </button>
+          </GridCell>
+          <GridCell
+            right
+            bottom
+            className="flex min-h-36.25 flex-col justify-center gap-1.5 p-8 text-sm font-medium"
+          >
+            <p>© 2026 PHILRICE</p>
+            <p>All rights reserved.</p>
+          </GridCell>
         </div>
       </footer>
     </div>

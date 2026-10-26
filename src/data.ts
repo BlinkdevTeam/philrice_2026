@@ -128,7 +128,7 @@ export type Session = {
   speaker: string;
 };
 
-export const SCHEDULE: Record<1 | 2, Session[]> = {
+export const SCHEDULE: Record<1 | 2 | 3, Session[]> = {
   1: [
     {
       time: "09:00",
@@ -174,6 +174,36 @@ export const SCHEDULE: Record<1 | 2, Session[]> = {
     },
   ],
   2: [
+    {
+      time: "09:30",
+      title: "Generative Worlds Showcase",
+      meta: "Main stage · 45 min",
+      track: "MAIN STAGE",
+      speaker: "Sofia Lim",
+    },
+    {
+      time: "11:00",
+      title: "Intelligence at the Edge",
+      meta: "Workshop · 90 min",
+      track: "ROBOTICS",
+      speaker: "Kenji Okada",
+    },
+    {
+      time: "14:00",
+      title: "Agentic AI Live Build",
+      meta: "Hands-on · 60 min",
+      track: "DEEP TECH",
+      speaker: "Aiko Tanaka",
+    },
+    {
+      time: "16:00",
+      title: "Founders Fireside & Closing",
+      meta: "Main stage · 60 min",
+      track: "MAIN STAGE",
+      speaker: "Marcus Reyes",
+    },
+  ],
+  3: [
     {
       time: "09:30",
       title: "Generative Worlds Showcase",
