@@ -507,7 +507,7 @@ export default function App() {
                       }`}
                     >
                       <div className="overflow-hidden">
-                        <p className="border-t border-white/10 px-5 py-5 leading-7 text-white/70 sm:px-6 sm:pl-[4.25rem]">
+                        <p className="border-t border-white/10 px-5 py-5 leading-7 text-white/70 sm:px-6 sm:pl-17">
                           {f.a}
                         </p>
                       </div>

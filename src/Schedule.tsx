@@ -12,7 +12,15 @@ const DAYS = [
 type DayId = (typeof DAYS)[number]["id"];
 
 // one color per track, assigned in the order tracks first appear
-const TRACK_COLORS = ["#4d9cff", "#34d399", "#f59e0b", "#c084fc", "#fb7185"];
+const TRACK_COLORS = [
+  "#4d9cff",
+  "#34d399",
+  "#f59e0b",
+  "#c084fc",
+  "#fb7185",
+  "#2dd4bf",
+  "#a3e635",
+];
 const TRACKS = Array.from(
   new Set(
     Object.values(SCHEDULE)
@@ -142,9 +150,9 @@ export default function Schedule() {
                   {/* rail + node (desktop) */}
                   <span
                     aria-hidden="true"
-                    className={`absolute left-[8.25rem] hidden w-px bg-white/10 md:block ${
-                      first ? "top-7" : "top-0"
-                    } ${last ? "h-7" : "bottom-0"}`}
+                    className={`absolute left-33 hidden w-px bg-white/10 ${
+                      rows.length > 1 ? "md:block" : ""
+                    } ${first ? "top-7" : "top-0"} ${last ? "h-7" : "bottom-0"}`}
                   />
                   <span
                     aria-hidden="true"
@@ -163,6 +171,37 @@ export default function Schedule() {
                       <p className="mt-1 text-sm text-white/60">{s.meta}</p>
                     )}
 
+                    {s.items && (
+                      <ul className="mt-4 space-y-3 border-t border-white/10 pt-4">
+                        {s.items.map((it) => (
+                          <li
+                            key={it.title + (it.speaker ?? "")}
+                            className="text-sm"
+                          >
+                            <p className="font-medium text-white/90">
+                              {it.title}
+                            </p>
+                            {it.note && (
+                              <p className="mt-0.5 text-xs leading-5 text-white/50">
+                                {it.note}
+                              </p>
+                            )}
+                            {(it.speaker || it.role) && (
+                              <p className="mt-1 text-xs text-[#4d9cff]">
+                                {it.speaker}
+                                {it.role && (
+                                  <span className="text-white/50">
+                                    {it.speaker ? " · " : ""}
+                                    {it.role}
+                                  </span>
+                                )}
+                              </p>
+                            )}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+
                     <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-white/10 pt-4">
                       <span
                         className="rounded-full border px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em]"
@@ -175,17 +214,19 @@ export default function Schedule() {
                         {s.track}
                       </span>
 
-                      <span className="flex items-center gap-2.5">
-                        <span
-                          aria-hidden="true"
-                          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#0b1b3d] text-[11px] font-bold text-white/60 ring-1 ring-white/15"
-                        >
-                          {initials(s.speaker)}
+                      {s.speaker && (
+                        <span className="flex items-center gap-2.5">
+                          <span
+                            aria-hidden="true"
+                            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#0b1b3d] text-[11px] font-bold text-white/60 ring-1 ring-white/15"
+                          >
+                            {initials(s.speaker)}
+                          </span>
+                          <span className="text-sm font-medium text-white/80">
+                            {s.speaker}
+                          </span>
                         </span>
-                        <span className="text-sm font-medium text-white/80">
-                          {s.speaker}
-                        </span>
-                      </span>
+                      )}
                     </div>
                   </div>
                 </li>
