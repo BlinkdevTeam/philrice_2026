@@ -1,10 +1,4 @@
-import {
-  useCallback,
-  useState,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-} from "react";
+import { useState, useEffect, useRef } from "react";
 
 import "./App.css";
 import {
@@ -18,7 +12,7 @@ import {
   type MotionValue,
   type Variants,
 } from "framer-motion";
-import { WRAP, SectionLabel } from "./ui"; // adjust
+import { WRAP, SectionLabel } from "./ui";
 import { Mail, Plus, ArrowUp, ArrowUpRight } from "lucide-react";
 
 import Header from "./Header";
@@ -27,28 +21,13 @@ import { SPEAKER_GROUPS } from "./speakers";
 import SpeakerDirectory from "./SpeakerDirectory";
 import Schedule from "./Schedule";
 import GridRain from "./GridRain";
+import LockHero from "./LockHero";
 
-import {
-  EVENT_DATE,
-  DETAILS,
-  STATS,
-  FEATURES,
-  // SCHEDULE,
-  FAQS,
-  FOOT_COLS,
-} from "./data";
-
-import lockAnimated from "./assets/lock-animated.svg?raw";
+import { EVENT_DATE, DETAILS, STATS, FEATURES, FAQS, FOOT_COLS } from "./data";
 
 import daPHILRICE from "./assets/da-philrice.png";
 import BagongPilipinas from "./assets/bagong-pilipinas.png";
 import UgnayPalay from "./assets/ugnay-palay-logo.png";
-
-const SVG_NS = "http://www.w3.org/2000/svg";
-const SCATTERED = 2.4;
-const HOVER = { from: 2.7, to: 4.7 };
-const LEAVE = { from: 0.5, to: 2.2 };
-const rand = (a: number, b: number) => a + Math.random() * (b - a);
 
 const iconProps = {
   viewBox: "0 0 24 24",
@@ -102,6 +81,65 @@ function CountNumber({
     String(Math.round(value * p)).padStart(2, "0"),
   );
   return <motion.span>{text}</motion.span>;
+}
+
+const calcTimeLeft = () => {
+  const d = Math.max(0, EVENT_DATE - Date.now());
+  return {
+    days: Math.floor(d / 864e5),
+    hours: Math.floor((d / 36e5) % 24),
+    minutes: Math.floor((d / 6e4) % 60),
+    seconds: Math.floor((d / 1e3) % 60),
+  };
+};
+
+// owns the 1-second timer, so only these four tiles re-render each tick
+function Countdown({ intro }: { intro: MotionValue<number> }) {
+  const [t, setT] = useState(calcTimeLeft);
+
+  useEffect(() => {
+    const id = setInterval(() => setT(calcTimeLeft()), 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  const items = [
+    { value: t.days, label: "Days" },
+    { value: t.hours, label: "Hours" },
+    { value: t.minutes, label: "Minutes" },
+    { value: t.seconds, label: "Seconds" },
+  ];
+
+  return (
+    <motion.div
+      variants={tiles}
+      className="mt-8 grid max-w-xl grid-cols-4 gap-3 sm:gap-4"
+    >
+      {items.map((item) => {
+        const isSeconds = item.label === "Seconds";
+        return (
+          <motion.div
+            key={item.label}
+            variants={tile}
+            className="flex min-w-0 flex-col items-center rounded-2xl border border-white/10 bg-white/5 px-2 py-4 backdrop-blur-md sm:py-5"
+          >
+            <span
+              key={item.value} // new key each change re-triggers the tick animation
+              className={`tick text-4xl font-bold leading-none tabular-nums tracking-tight sm:text-5xl md:text-6xl ${
+                isSeconds
+                  ? "text-[#4d9cff] drop-shadow-[0_0_14px_rgba(77,156,255,0.6)]"
+                  : "text-white"
+              }`}
+            >
+              <CountNumber value={item.value} intro={intro} />
+            </span>
+            <span className="mt-2 text-[10px] font-medium uppercase tracking-[0.2em] text-white/50 sm:text-xs">
+              {item.label}
+            </span>
+          </motion.div>
+        );
+      })}
+    </motion.div>
+  );
 }
 // -------------------End of Hero--------------------- //
 
@@ -195,44 +233,10 @@ const LOGO = "h-14 w-auto object-contain";
 
 /* ---------- page ---------- */
 export default function App() {
-  // const [day, setDay] = useState<1 | 2>(1);
   const [open, setOpen] = useState<number | null>(0);
 
   const [emailCopied, setEmailCopied] = useState(false);
 
-  const [timeLeft, setTimeLeft] = useState({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-  });
-
-  useEffect(() => {
-    const updateTimer = () => {
-      const difference = Math.max(0, EVENT_DATE - Date.now());
-
-      setTimeLeft({
-        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-        minutes: Math.floor((difference / (1000 * 60)) % 60),
-        seconds: Math.floor((difference / 1000) % 60),
-      });
-    };
-
-    updateTimer();
-    const interval = setInterval(updateTimer, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  const timerItems = [
-    { value: timeLeft.days, label: "Days" },
-    { value: timeLeft.hours, label: "Hours" },
-    { value: timeLeft.minutes, label: "Minutes" },
-    { value: timeLeft.seconds, label: "Seconds" },
-  ];
-
-  // at the top of your component
   const copyTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleCopyEmail = async () => {
@@ -248,44 +252,11 @@ export default function App() {
     }
   };
 
-  // optional cleanup
   useEffect(() => {
     return () => {
       if (copyTimeout.current) clearTimeout(copyTimeout.current);
     };
   }, []);
-
-  //svg animated
-  // const DEBUG = false;
-  const wrapRef = useRef<HTMLDivElement>(null);
-  const timer = useRef<number | undefined>(undefined);
-
-  const getSvg = useCallback(
-    () => wrapRef.current?.querySelector("svg") ?? null,
-    [],
-  );
-
-  const setHover = useCallback((on: boolean) => {
-    if (wrapRef.current) wrapRef.current.dataset.hover = String(on);
-  }, []);
-
-  const playRange = useCallback(
-    (from: number, to: number) => {
-      const svg = getSvg();
-      if (!svg) return;
-      window.clearTimeout(timer.current);
-      svg.setCurrentTime(from);
-      svg.unpauseAnimations();
-      timer.current = window.setTimeout(
-        () => {
-          svg.setCurrentTime(to);
-          svg.pauseAnimations();
-        },
-        (to - from) * 1000,
-      );
-    },
-    [getSvg],
-  );
 
   const reduce = useReducedMotion();
 
@@ -300,62 +271,6 @@ export default function App() {
     return () => c.stop();
   }, [intro, reduce]);
 
-  // lock intro: assemble once, hold, then break apart into the idle orbit
-  useEffect(() => {
-    if (reduce) return;
-    const group = wrapRef.current?.closest(".group");
-    const timers: number[] = [];
-    const cancel = () => timers.forEach((t) => window.clearTimeout(t));
-
-    // if the visitor hovers during the intro, their hover takes over
-    group?.addEventListener("mouseenter", cancel, { once: true });
-
-    timers.push(
-      window.setTimeout(() => {
-        if (group?.matches(":hover")) return;
-        setHover(true);
-        playRange(HOVER.from, HOVER.to);
-
-        timers.push(
-          window.setTimeout(
-            () => {
-              setHover(false);
-              playRange(LEAVE.from, LEAVE.to);
-            },
-            (HOVER.to - HOVER.from) * 1000 + 900,
-          ),
-        );
-      }, 1000),
-    );
-
-    return () => {
-      cancel();
-      group?.removeEventListener("mouseenter", cancel);
-    };
-  }, [reduce, setHover, playRange]);
-
-  useLayoutEffect(() => {
-    const svg = getSvg();
-    if (!svg) return;
-
-    // wrap every piece in a <g> that carries its own random float
-    svg.querySelectorAll("path").forEach((p) => {
-      if (p.parentElement?.classList.contains("lock-piece")) return; // StrictMode runs this twice
-      const g = document.createElementNS(SVG_NS, "g");
-      g.setAttribute("class", "lock-piece");
-      g.style.setProperty("--dir", Math.random() < 0.8 ? "1" : "-1"); // mostly one way, a few counter-orbit
-      g.style.setProperty("--dur", `${rand(16, 40)}s`); // seconds per full circle
-      g.style.setProperty("--delay", `-${rand(0, 40)}s`); // random starting angle
-      p.replaceWith(g);
-      g.appendChild(p);
-    });
-
-    svg.setCurrentTime(SCATTERED);
-    svg.pauseAnimations();
-  }, [getSvg]);
-
-  useEffect(() => () => window.clearTimeout(timer.current), []);
-
   return (
     <div className="relative isolate overflow-hidden min-h-screen bg-[#121314] text-white">
       <Header />
@@ -364,7 +279,7 @@ export default function App() {
         {/* radial */}
         <div
           aria-hidden
-          className="glow-main pointer-events-none absolute left-0 top-0 -z-10 h-210 w-260 -translate-x-1/4 -translate-y-1/3 bg-[radial-gradient(ellipse_closest-side,rgba(77,156,255,0.6),rgba(77,156,255,0))]"
+          className="glow-main pointer-events-none absolute left-0 top-0 -z-10 h-210 w-260 -translate-x-1/4 -translate-y-1/3 bg-[radial-gradient(ellipse_closest-side,rgba(77,156,255,0.6),rgba(77,156,255,0))] max-md:h-[420px] max-md:w-[520px]"
         />
         {/* hero */}
         <MotionConfig reducedMotion="user">
@@ -379,7 +294,7 @@ export default function App() {
               animate={{ opacity: 1 }}
               transition={{ duration: 1.8, ease: "easeOut" }}
             >
-              <div className="glow-alt pointer-events-none absolute -right-100 bottom-0 -z-10 h-300 w-300 translate-y-70 bg-[radial-gradient(circle_closest-side,rgba(0,85,255,0.5),rgba(0,136,255,0))] opacity-55" />
+              <div className="glow-alt pointer-events-none absolute -right-100 bottom-0 -z-10 h-300 w-300 translate-y-70 bg-[radial-gradient(circle_closest-side,rgba(0,85,255,0.5),rgba(0,136,255,0))] opacity-55 max-md:hidden" />
               <div className="pointer-events-none absolute inset-y-0 left-1/2 -z-10 w-screen -translate-x-1/2 bg-[linear-gradient(to_right,rgba(77,156,255,0.07)_1px,transparent_1px),linear-gradient(to_bottom,rgba(77,156,255,0.07)_1px,transparent_1px)] bg-size-[80px_80px] opacity-40" />
               <GridRain />
             </motion.div>
@@ -420,35 +335,7 @@ export default function App() {
                 Shared Commitment
               </motion.p>
 
-              <motion.div
-                variants={tiles}
-                className="mt-8 grid max-w-xl grid-cols-4 gap-3 sm:gap-4"
-              >
-                {timerItems.map((item) => {
-                  const isSeconds = item.label.toLowerCase() === "seconds";
-                  return (
-                    <motion.div
-                      key={item.label}
-                      variants={tile}
-                      className="flex min-w-0 flex-col items-center rounded-2xl border border-white/10 bg-white/5 px-2 py-4 backdrop-blur-md sm:py-5"
-                    >
-                      <span
-                        key={item.value} // new key each change re-triggers the tick animation
-                        className={`tick text-4xl font-bold leading-none tabular-nums tracking-tight sm:text-5xl md:text-6xl ${
-                          isSeconds
-                            ? "text-[#4d9cff] drop-shadow-[0_0_14px_rgba(77,156,255,0.6)]"
-                            : "text-white"
-                        }`}
-                      >
-                        <CountNumber value={item.value} intro={intro} />
-                      </span>
-                      <span className="mt-2 text-[10px] font-medium uppercase tracking-[0.2em] text-white/50 sm:text-xs">
-                        {item.label}
-                      </span>
-                    </motion.div>
-                  );
-                })}
-              </motion.div>
+              <Countdown intro={intro} />
 
               <motion.dl
                 variants={rise}
@@ -476,47 +363,8 @@ export default function App() {
               </motion.dl>
             </motion.div>
 
-            {/* right column: the lock */}
-            <div
-              className="group relative lg:translate-x-20"
-              onMouseEnter={() => {
-                setHover(true);
-                playRange(HOVER.from, HOVER.to);
-              }}
-              onMouseLeave={() => {
-                setHover(false);
-                playRange(LEAVE.from, LEAVE.to);
-              }}
-            >
-              {/* globe rings expand outward first */}
-              <motion.div
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0"
-                initial={{ opacity: 0, scale: 0.7 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 1.4, delay: 0.3, ease: EASE }}
-              >
-                <div className="absolute inset-[6%] rounded-full border border-white/10 transition-colors duration-700 group-hover:border-[#4d9cff]/40" />
-                <div className="absolute inset-[20%] animate-[spin_90s_linear_infinite] rounded-full border border-dashed border-white/10 transition-colors duration-700 group-hover:border-[#4d9cff]/30" />
-                <div className="absolute inset-[30%] rounded-full bg-[#4d9cff]/0 blur-3xl transition-all duration-700 group-hover:bg-[#4d9cff]/25" />
-              </motion.div>
-
-              {/* the lock fades and scales in */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.88 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 1.2, delay: 0.5, ease: EASE }}
-              >
-                <div
-                  ref={wrapRef}
-                  data-hover="false"
-                  role="img"
-                  aria-label="Animated lock illustration"
-                  className="lock-wrap relative flex aspect-square w-full items-center justify-center [&>svg]:h-full [&>svg]:w-full"
-                  dangerouslySetInnerHTML={{ __html: lockAnimated }}
-                />
-              </motion.div>
-            </div>
+            {/* right column: the lock (static poster on phones, animated SVG on desktop) */}
+            <LockHero />
           </section>
         </MotionConfig>
 
@@ -661,10 +509,8 @@ export default function App() {
           </section>
         </MotionConfig>
 
-        {/* schedule */}
-        <section id="schedule" className="">
-          <Schedule />
-        </section>
+        {/* schedule (Schedule renders its own <section id="schedule">) */}
+        <Schedule />
 
         {/* faq */}
         <MotionConfig reducedMotion="user">
@@ -819,7 +665,7 @@ export default function App() {
           {/* soft glow on the top edge */}
           <div
             aria-hidden
-            className="glow-main pointer-events-none absolute left-1/2 top-0 -z-10 h-112 w-4xl -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(ellipse_closest-side,rgba(77,156,255,0.6),rgba(77,156,255,0))]"
+            className="glow-main pointer-events-none absolute left-1/2 top-0 -z-10 h-112 w-4xl -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(ellipse_closest-side,rgba(77,156,255,0.6),rgba(77,156,255,0))] max-md:hidden"
           />
 
           {/* closing call to action */}

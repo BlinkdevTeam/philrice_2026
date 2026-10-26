@@ -41,12 +41,13 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ease-out motion-reduce:transition-none ${
+      className={`fixed inset-x-0 top-0 z-50 transition-[transform,background-color,border-color,box-shadow] duration-300 ease-out motion-reduce:transition-none ${
         hidden ? "-translate-y-full" : "translate-y-0"
       } ${
         scrolled
-          ? "border-b border-white/10 bg-white/5 shadow-[0_8px_32px_rgba(0,0,0,0.25)] backdrop-blur-xl backdrop-saturate-150"
-          : "border-b border-transparent bg-transparent shadow-none backdrop-blur-none"
+          ? // phones get a solid bar; the blur is switched off for them in App.css
+            "border-b border-white/10 bg-white/5 shadow-[0_8px_32px_rgba(0,0,0,0.25)] backdrop-blur-xl backdrop-saturate-150 max-md:bg-[#121314]"
+          : "border-b border-transparent bg-transparent shadow-none"
       }`}
     >
       <div className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-6">

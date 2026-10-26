@@ -43,6 +43,11 @@ html::-webkit-scrollbar {
    animation: lock-orbit var(--dur) linear var(--delay) infinite;
 }
 
+/* LockHero sets data-paused while the lock is scrolled out of view */
+.lock-wrap[data-paused="true"] .lock-piece {
+   animation-play-state: paused;
+}
+
 @keyframes lock-orbit {
    to {
       --a: 360deg;

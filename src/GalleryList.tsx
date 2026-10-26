@@ -263,7 +263,7 @@ export default function GalleryList({ items, autoPlay = 0 }: Props) {
   };
 
   return (
-    <div className="mt-12">
+    <div className="-mt-20 md:mt-12">
       <div className="overflow-hidden">
         <motion.ul
           ref={listRef}

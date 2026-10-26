@@ -103,29 +103,32 @@ function FeaturedCard({
 /* small card: everyone else */
 function CompactCard({ s, onOpen }: { s: Speaker; onOpen: () => void }) {
   return (
-    <li className="group rounded-xl border border-white/10 bg-white/5 transition duration-300 hover:border-[#4d9cff]/40 hover:bg-white/10 hover:shadow-[0_0_30px_-10px_rgba(77,156,255,0.6)]">
+    <li className="group min-w-0 rounded-xl border border-white/10 bg-white/5 transition duration-300 hover:border-[#4d9cff]/40 hover:bg-white/10 hover:shadow-[0_0_30px_-10px_rgba(77,156,255,0.6)]">
       <button
         type="button"
         onClick={onOpen}
         aria-haspopup="dialog"
-        className="flex w-full cursor-pointer items-center gap-3 rounded-xl p-3 text-left outline-none focus-visible:ring-2 focus-visible:ring-[#4d9cff]"
+        className="flex w-full cursor-pointer items-center gap-3 rounded-xl p-3 text-left outline-none focus-visible:ring-2 focus-visible:ring-[#4d9cff] sm:gap-4"
       >
-        <div className="relative h-36 w-36 shrink-0 overflow-hidden rounded-full bg-[#0b1b3d] ring-1 ring-white/15 transition group-hover:ring-[#4d9cff]/60">
-          <Photo s={s} textSize="text-base" />
+        <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-full bg-[#0b1b3d] ring-1 ring-white/15 transition group-hover:ring-[#4d9cff]/60 sm:h-24 sm:w-24">
+          <Photo s={s} textSize="text-xl" />
         </div>
         <div className="min-w-0 flex-1">
           <h5
-            className="truncate text-sm font-semibold text-white"
+            className="line-clamp-2 text-sm font-semibold leading-snug text-white"
             title={s.name}
           >
             {s.name}
           </h5>
-          <p className="truncate text-xs text-white/55" title={s.role}>
+          <p
+            className="mt-0.5 line-clamp-2 text-xs leading-5 text-white/55"
+            title={s.role}
+          >
             {s.role}
           </p>
         </div>
         <ArrowUpRight
-          className="h-4 w-4 shrink-0 text-[#4d9cff] opacity-0 transition-opacity group-hover:opacity-100"
+          className="hidden h-4 w-4 shrink-0 text-[#4d9cff] opacity-0 transition-opacity group-hover:opacity-100 sm:block"
           aria-hidden="true"
         />
       </button>
@@ -385,7 +388,7 @@ export default function SpeakerDirectory() {
             />
 
             {featured ? (
-              <ul className="mt-6 grid gap-5 sm:grid-cols-2">
+              <ul className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2">
                 {session.speakers.map((s) => (
                   <FeaturedCard
                     key={s.name}
@@ -397,7 +400,7 @@ export default function SpeakerDirectory() {
                 ))}
               </ul>
             ) : (
-              <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              <ul className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {session.speakers.map((s) => (
                   <CompactCard key={s.name} s={s} onOpen={() => setOpen(s)} />
                 ))}
