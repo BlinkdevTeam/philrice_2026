@@ -126,7 +126,7 @@ function Countdown({ intro }: { intro: MotionValue<number> }) {
               key={item.value} // new key each change re-triggers the tick animation
               className={`tick text-4xl font-bold leading-none tabular-nums tracking-tight sm:text-5xl md:text-6xl ${
                 isSeconds
-                  ? "text-[#4d9cff] drop-shadow-[0_0_14px_rgba(77,156,255,0.6)]"
+                  ? "text-[#FCD608] drop-shadow-[0_0_14px_rgba(77,156,255,0.6)]"
                   : "text-white"
               }`}
             >
@@ -187,8 +187,11 @@ function CountStat({ value }: { value: string }) {
 
 // -------------------Start of Speakers--------------------- //
 // unique people across every group (Dr. Pinto appears in two sessions)
+// groups that don't count toward the header total
+const EXCLUDED_GROUPS = ["featured", "program"];
+
 const SPEAKER_TOTAL = new Set(
-  SPEAKER_GROUPS.flatMap((g) =>
+  SPEAKER_GROUPS.filter((g) => !EXCLUDED_GROUPS.includes(g.id)).flatMap((g) =>
     g.sessions.flatMap((s) => s.speakers.map((p) => p.name)),
   ),
 ).size;
@@ -295,7 +298,7 @@ export default function App() {
               transition={{ duration: 1.8, ease: "easeOut" }}
             >
               <div className="glow-alt pointer-events-none absolute -right-100 bottom-0 -z-10 h-300 w-300 translate-y-70 bg-[radial-gradient(circle_closest-side,rgba(0,85,255,0.5),rgba(0,136,255,0))] opacity-55 max-md:hidden" />
-              <div className="pointer-events-none absolute inset-y-0 left-1/2 -z-10 w-screen -translate-x-1/2 bg-[linear-gradient(to_right,rgba(77,156,255,0.07)_1px,transparent_1px),linear-gradient(to_bottom,rgba(77,156,255,0.07)_1px,transparent_1px)] bg-size-[80px_80px] opacity-40" />
+              <div className="pointer-events-none absolute inset-y-0 left-1/2 -z-10 w-screen -translate-x-1/2 bg-[linear-gradient(to_right,rgba(77,156,255,0.07)_1px,transparent_1px),linear-gradient(to_bottom,rgba(77,156,255,0.07)_1px,transparent_1px)] bg-size-[80px_80px] opacity-80" />
               <GridRain />
             </motion.div>
 
@@ -303,7 +306,7 @@ export default function App() {
             <motion.div variants={container} initial="hidden" animate="show">
               <motion.span
                 variants={rise}
-                className="inline-flex items-center gap-3 rounded-full border border-white/15 bg-white/5 py-1.5 pl-3 pr-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/80 shadow-[0_0_24px_rgba(77,156,255,0.15)] backdrop-blur-md"
+                className="inline-flex items-center gap-3 rounded-full border border-white/15 bg-white/5 py-1.5 pl-3 pr-4 text-[11px] font-folio font-light uppercase tracking-[0.18em] text-white/80 shadow-[0_0_24px_rgba(77,156,255,0.15)] backdrop-blur-md"
               >
                 <span className="flex items-center gap-2 text-white">
                   <span className="relative flex h-2 w-2">
@@ -317,22 +320,27 @@ export default function App() {
               </motion.span>
 
               {/* each line slides up from behind a mask */}
-              <h1 className="mt-6 text-6xl font-extrabold leading-tight md:text-7xl">
+              <h1 className="mt-6 text-4xl font-condensed font-bold leading-tight md:text-7xl">
                 <span className="block overflow-hidden pb-1">
-                  <motion.span variants={line} className="block">
-                    UNLOCKING
+                  <motion.span variants={line} className="block text-[#FCD608]">
+                    UNLOCKING{" "}
+                    <span className="text-[#ffffff] text-3xl md:text-[60px]">
+                      THE
+                    </span>
                   </motion.span>
                 </span>
                 <span className="block overflow-hidden pb-1">
-                  <motion.span variants={line} className="block">
-                    <span className="text-[#fef102]">THE</span> VISAYAS’
+                  <motion.span variants={line} className="block text-[#FCD608]">
+                    VISAYAS’ POTENTIAL
                   </motion.span>
                 </span>
               </h1>
 
-              <motion.p variants={rise} className="mt-6 text-2xl font-semibold">
-                Potential for Rice Security Through <br /> Convergence and
-                Shared Commitment
+              <motion.p
+                variants={rise}
+                className="mt-2 text-4xl tracking-tighter font-normal"
+              >
+                for Rice Security Through Convergence and Shared Commitment
               </motion.p>
 
               <Countdown intro={intro} />
@@ -347,7 +355,7 @@ export default function App() {
                     className="flex items-center gap-3 px-4 py-3.5"
                   >
                     <Icon
-                      className="h-5 w-5 shrink-0 text-[#4d9cff]"
+                      className="h-5 w-5 shrink-0 text-[#FCD608]"
                       aria-hidden="true"
                     />
                     <div className="min-w-0">
@@ -385,7 +393,7 @@ export default function App() {
                   </motion.div>
 
                   {/* each line slides up from behind a mask */}
-                  <h2 className="mt-4 text-4xl font-extrabold leading-tight sm:text-5xl">
+                  <h2 className="mt-4 text-5xl font-condensed font-bold leading-tight sm:text-7xl">
                     <span className="block overflow-hidden pb-1">
                       <motion.span variants={line} className="block">
                         38th Ugnay Palay
@@ -413,7 +421,7 @@ export default function App() {
                         <dt className="mt-1 text-[10px] font-medium uppercase tracking-[0.2em] text-white/50">
                           {s.l}
                         </dt>
-                        <dd className="text-3xl font-bold tabular-nums text-white">
+                        <dd className="text-4xl font-bold tabular-nums text-[#FCD608]">
                           <CountStat value={s.n} />
                         </dd>
                       </div>
@@ -423,14 +431,14 @@ export default function App() {
 
                 <motion.p
                   variants={rise}
-                  className="self-center text-base leading-8 text-white/70 lg:text-lg"
+                  className="self-center text-base leading-8 text-white/70 sm:text-lg"
                 >
                   The 38th Ugnay Palay National Rice R4D Conference arrives at a
                   crucial moment in the evolution of the Philippine rice
                   industry. This year’s theme,{" "}
                   <motion.span
                     variants={highlight}
-                    className="bg-[linear-gradient(transparent_62%,rgba(77,156,255,0.3)_62%)] bg-no-repeat font-semibold text-white [box-decoration-break:clone]"
+                    className="bg-[linear-gradient(transparent_62%,rgba(253,242,183,0.4)_62%)] bg-no-repeat font-semibold text-white [box-decoration-break:clone]"
                   >
                     “UNLOCKING THE VISAYAS’ Potential for Rice Security Through
                     Convergence and Shared Commitment”
@@ -470,7 +478,7 @@ export default function App() {
                   <motion.div variants={rise}>
                     <SectionLabel num="02" name="SPEAKERS" />
                   </motion.div>
-                  <h2 className="mt-4 text-4xl font-extrabold sm:text-5xl">
+                  <h2 className="mt-4 text-4xl font-condensed font-bold md:text-7xl">
                     <span className="block overflow-hidden pb-1">
                       <motion.span variants={line} className="block">
                         Minds Behind
@@ -488,7 +496,7 @@ export default function App() {
                 </div>
 
                 <motion.div variants={rise} className="text-right">
-                  <p className="text-5xl font-extrabold tabular-nums text-white">
+                  <p className="text-5xl text-[#FCD608] font-bold tabular-nums">
                     <CountStat value={String(SPEAKER_TOTAL)} />
                   </p>
                   <p className="mt-1 text-[10px] font-medium uppercase tracking-[0.2em] text-white/50">
@@ -530,7 +538,7 @@ export default function App() {
                   <SectionLabel num="04" name="FAQ" />
                 </motion.div>
 
-                <h2 className="mt-4 text-4xl font-extrabold leading-tight sm:text-5xl">
+                <h2 className="mt-4 text-4xl font-condensed font-bold leading-tight sm:text-7xl">
                   <span className="block overflow-hidden pb-1">
                     <motion.span variants={line} className="block">
                       Questions,
@@ -679,7 +687,7 @@ export default function App() {
                   {DETAILS[0].value} · {DETAILS[1].value}
                 </p>
                 <h2 className="mt-3 max-w-xl text-3xl font-extrabold leading-tight sm:text-4xl">
-                  Unlocking the Visayas’ potential starts with you.
+                  Unlocking the Visayas’ Potential starts with you.
                 </h2>
               </div>
               <a

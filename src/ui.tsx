@@ -1,6 +1,6 @@
 export function SectionLabel({ num, name }: { num: string; name: string }) {
   return (
-    <p className="text-sm font-semibold tracking-widest">
+    <p className="text-xs font-medium tracking-widest">
       {num} / {name}
     </p>
   );

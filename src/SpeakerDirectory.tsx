@@ -1,18 +1,27 @@
-import { useEffect, useRef, useState, type KeyboardEvent } from "react";
+import { useEffect, useId, useRef, useState, type KeyboardEvent } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, ChevronLeft, ChevronRight, X } from "lucide-react";
-import { SPEAKER_GROUPS, type Session, type Speaker } from "./speakers";
+import {
+  SPEAKER_GROUPS,
+  thumbOf,
+  type Session,
+  type Speaker,
+} from "./speakers";
 
 type Entry = { speaker: Speaker; session: string };
 
-const initials = (name: string) =>
-  name
-    .replace(/^(Dr\.|Prof\.|Engr\.|Atty\.|Hon\.)\s*/, "")
-    .split(" ")
-    .map((w) => w[0])
-    .slice(0, 2)
-    .join("");
+const initials = (name: string) => {
+  const parts = name
+    .replace(/^(?:[A-Z][a-z]{1,4}\.\s*)+/, "") // any leading title: Dr. Ms. Mr. Cong. Engr. ...
+    .replace(/,.*$/, "") // ", CESO III" and similar
+    .replace(/\s+(?:Jr|Sr)\.?$/i, "")
+    .trim()
+    .split(/\s+/);
+  const first = parts[0]?.[0] ?? "";
+  const last = parts.length > 1 ? parts[parts.length - 1][0] : "";
+  return (first + last).toUpperCase();
+};
 
 const count = (sessions: Session[]) =>
   sessions.reduce((sum, s) => sum + s.speakers.length, 0);
@@ -22,20 +31,28 @@ function Photo({
   s,
   textSize = "text-2xl",
   color = false,
+  small = false,
+  portrait = false,
 }: {
   s: Speaker;
   textSize?: string;
   color?: boolean;
+  small?: boolean;
+  portrait?: boolean;
 }) {
-  return s.image ? (
+  const src = small ? thumbOf(s.image) : s.image;
+  return src ? (
     <img
-      src={s.image}
+      src={src}
       alt={s.name}
       loading="lazy"
+      decoding="async"
       draggable={false}
-      className={`absolute inset-0 h-full w-full object-cover transition duration-500 ${
-        color ? "" : "grayscale group-hover:scale-105 group-hover:grayscale-0"
-      }`}
+      className={`h-full w-full transition duration-500 ${
+        portrait
+          ? "object-contain object-bottom md:object-cover md:object-top"
+          : "object-cover object-top"
+      } ${color ? "" : "grayscale group-hover:scale-105 group-hover:grayscale-0"}`}
     />
   ) : (
     <div
@@ -46,8 +63,126 @@ function Photo({
     </div>
   );
 }
+// each ring rotates around the center of the SVG
+const HUD =
+  "[transform-box:view-box] [transform-origin:50%_50%] motion-reduce:animate-none";
 
-/* large card: Guest of Honor and Keynotes */
+function TechRing() {
+  const sweep = useId().replace(/:/g, "");
+
+  return (
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 200 200"
+      preserveAspectRatio="xMidYMid meet"
+      className="pointer-events-none absolute inset-[3%] -z-10 h-[94%] w-[94%] text-[#dcecff] opacity-70 transition-opacity duration-500 group-hover:opacity-100"
+    >
+      <defs>
+        <linearGradient
+          id={sweep}
+          gradientUnits="userSpaceOnUse"
+          x1="100"
+          y1="12"
+          x2="157"
+          y2="33"
+        >
+          <stop offset="0" stopColor="currentColor" stopOpacity="0" />
+          <stop offset="1" stopColor="currentColor" stopOpacity="0.35" />
+        </linearGradient>
+      </defs>
+
+      {/* outer hairline + crosshair marks */}
+      <circle
+        cx="100"
+        cy="100"
+        r="97"
+        fill="none"
+        stroke="currentColor"
+        strokeOpacity="0.25"
+        strokeWidth="0.6"
+      />
+      <path
+        d="M100 0v10M100 190v10M0 100h10M190 100h10"
+        stroke="currentColor"
+        strokeOpacity="0.6"
+        strokeWidth="1"
+      />
+
+      {/* tick marks, slow clockwise */}
+      <g className={`${HUD} animate-[hud-spin_60s_linear_infinite]`}>
+        <circle
+          cx="100"
+          cy="100"
+          r="91"
+          fill="none"
+          stroke="currentColor"
+          strokeOpacity="0.5"
+          strokeWidth="4"
+          strokeDasharray="0.8 5.553"
+        />
+      </g>
+
+      {/* segmented arcs, counter-clockwise */}
+      <g className={`${HUD} animate-[hud-spin_22s_linear_infinite_reverse]`}>
+        <circle
+          cx="100"
+          cy="100"
+          r="82"
+          fill="none"
+          stroke="currentColor"
+          strokeOpacity="0.8"
+          strokeWidth="1.6"
+          strokeLinecap="round"
+          strokeDasharray="100 20 60 20 37.6 20"
+        />
+      </g>
+
+      {/* bright accent arc, clockwise */}
+      <g className={`${HUD} animate-[hud-spin_9s_linear_infinite]`}>
+        <circle
+          cx="100"
+          cy="100"
+          r="73"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.2"
+          strokeLinecap="round"
+          strokeDasharray="60 398.67"
+        />
+      </g>
+
+      {/* fine dashed ring */}
+      <g className={`${HUD} animate-[hud-spin_14s_linear_infinite]`}>
+        <circle
+          cx="100"
+          cy="100"
+          r="64"
+          fill="none"
+          stroke="currentColor"
+          strokeOpacity="0.45"
+          strokeWidth="0.8"
+          strokeDasharray="2 5"
+        />
+      </g>
+
+      {/* radar sweep */}
+      <g className={`${HUD} animate-[hud-spin_7s_linear_infinite]`}>
+        <path
+          d="M100 100 L100 12 A88 88 0 0 1 156.6 32.6 Z"
+          fill={`url(#${sweep})`}
+        />
+      </g>
+
+      {/* orbiting dot */}
+      <g className={`${HUD} animate-[hud-spin_11s_linear_infinite_reverse]`}>
+        <circle cx="100" cy="9" r="5" fill="currentColor" fillOpacity="0.25" />
+        <circle cx="100" cy="9" r="2.6" fill="currentColor" />
+      </g>
+    </svg>
+  );
+}
+
+/* large card: Guest of Honor, Keynotes, Opening Program */
 function FeaturedCard({
   s,
   label,
@@ -61,36 +196,57 @@ function FeaturedCard({
 }) {
   return (
     <li
-      className={`tech-card group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 transition duration-300 hover:-translate-y-1 hover:border-[#4d9cff]/40 hover:shadow-[0_0_50px_-8px_rgba(77,156,255,0.55)] ${
-        wide ? "sm:col-span-2" : ""
+      className={`tech-card group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 transition duration-300 [@media(hover:hover)]:hover:-translate-y-1 hover:border-[#4d9cff]/40 hover:shadow-[0_0_50px_-8px_rgba(77,156,255,0.55)] ${
+        wide ? "md:col-span-2" : ""
       }`}
     >
       <button
         type="button"
         onClick={onOpen}
         aria-haspopup="dialog"
-        className="flex h-full w-full cursor-pointer flex-col text-left outline-none focus-visible:ring-2 focus-visible:ring-[#4d9cff] sm:flex-row"
+        className={`flex h-full w-full cursor-pointer flex-col text-left outline-none focus-visible:ring-2 focus-visible:ring-[#4d9cff] ${
+          wide ? "md:flex-row" : "lg:flex-row"
+        }`}
       >
-        <div className="relative aspect-[4/5] w-full shrink-0 overflow-hidden bg-[#0b1b3d] sm:aspect-auto sm:min-h-72 sm:w-2/5">
-          <Photo s={s} textSize="text-6xl" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0e0f12]/70 via-transparent to-transparent sm:bg-gradient-to-r sm:from-transparent sm:to-[#0e0f12]/60" />
-          <div className="scan-line" aria-hidden="true" />
+        {/* photo: grayscale only where hover exists */}
+        <div
+          className={`relative isolate flex h-72 w-full shrink-0 items-center justify-center overflow-hidden bg-gradient-to-b from-[#FCD608] via-[#4788C8] to-[#132049] pt-4 transition-[filter] duration-500 [@media(hover:hover)]:grayscale [@media(hover:hover)]:group-hover:grayscale-0 ${
+            wide
+              ? "md:h-auto md:min-h-72 md:w-2/5"
+              : "lg:h-auto lg:min-h-72 lg:w-2/5"
+          }`}
+        >
+          <TechRing />
+          <div className="relative z-10 h-full w-full">
+            <Photo s={s} textSize="text-6xl" color portrait />
+          </div>
+          <div
+            className={`pointer-events-none absolute inset-0 z-20 bg-gradient-to-t from-[#0e0f12]/70 via-transparent via-25% to-transparent ${
+              wide
+                ? "md:bg-gradient-to-r md:from-transparent md:via-transparent md:to-[#0e0f12]/60"
+                : "lg:bg-gradient-to-r lg:from-transparent lg:via-transparent lg:to-[#0e0f12]/60"
+            }`}
+          />
+          <div
+            className="scan-line pointer-events-none absolute inset-0 z-30"
+            aria-hidden="true"
+          />
         </div>
 
-        <div className="flex flex-1 flex-col justify-center p-6 sm:p-8">
-          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#4d9cff]">
+        <div className="flex min-w-0 flex-1 flex-col justify-center p-5 sm:p-6 md:p-8">
+          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#FCD608]">
             {label}
           </span>
-          <h4 className="mt-3 text-2xl font-bold leading-tight text-white sm:text-3xl">
+          <h4 className="mt-3 text-xl font-bold leading-tight text-white sm:text-2xl md:text-3xl">
             {s.name}
           </h4>
-          <p className="mt-2 text-white/60">{s.role}</p>
+          <p className="mt-2 text-sm text-white/60 sm:text-base">{s.role}</p>
           {s.topic && (
-            <p className="mt-5 border-t border-white/10 pt-4 text-sm text-[#4d9cff]">
+            <p className="mt-4 border-t border-white/10 pt-4 text-sm text-[#4d9cff]">
               {s.topic}
             </p>
           )}
-          <span className="mt-5 inline-flex items-center gap-1 text-xs font-semibold text-white/60 transition-colors group-hover:text-white">
+          <span className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-white/60 transition-colors group-hover:text-white">
             View profile
             <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
           </span>
@@ -110,8 +266,8 @@ function CompactCard({ s, onOpen }: { s: Speaker; onOpen: () => void }) {
         aria-haspopup="dialog"
         className="flex w-full cursor-pointer items-center gap-3 rounded-xl p-3 text-left outline-none focus-visible:ring-2 focus-visible:ring-[#4d9cff] sm:gap-4"
       >
-        <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-full bg-[#0b1b3d] ring-1 ring-white/15 transition group-hover:ring-[#4d9cff]/60 sm:h-24 sm:w-24">
-          <Photo s={s} textSize="text-xl" />
+        <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-full bg-gradient-to-b from-[#FCD608] via-[#4788C8] to-[#132049] grayscale transition-all duration-500 group-hover:grayscale-0 ring-1 ring-white/15 group-hover:ring-[#4d9cff]/60 sm:h-24 sm:w-24">
+          <Photo s={s} textSize="text-xl" small />
         </div>
         <div className="min-w-0 flex-1">
           <h5
@@ -189,8 +345,9 @@ function SpeakerModal({
 
     // keep Tab inside the dialog
     if (e.key === "Tab") {
-      const els =
-        panelRef.current?.querySelectorAll<HTMLElement>("button, a[href]");
+      const els = panelRef.current?.querySelectorAll<HTMLElement>(
+        'button, a[href], [tabindex="0"]',
+      );
       if (!els?.length) return;
       const first = els[0];
       const last = els[els.length - 1];
@@ -206,7 +363,7 @@ function SpeakerModal({
 
   return (
     <motion.div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-3 backdrop-blur-sm sm:p-4"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -225,45 +382,57 @@ function SpeakerModal({
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 16, scale: 0.98 }}
         transition={{ type: "spring", stiffness: 260, damping: 26 }}
-        className="modal-glow relative max-h-[90vh] w-full max-w-3xl overflow-y-auto overflow-x-hidden rounded-2xl border border-white/10 bg-[#0e0f12] shadow-[0_0_80px_-20px_rgba(77,156,255,0.5)]"
+        className="modal-glow relative flex h-[88dvh] w-full max-w-3xl flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#0e0f12] shadow-[0_0_80px_-20px_rgba(77,156,255,0.5)] md:h-[85vh] md:max-h-[540px]"
       >
         <button
           ref={closeRef}
           type="button"
           onClick={onClose}
           aria-label="Close"
-          className="absolute right-3 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-black/40 text-white backdrop-blur-md hover:bg-white/10"
+          className="absolute right-3 top-3 z-40 flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-black/50 text-white backdrop-blur-md hover:bg-white/10 md:h-9 md:w-9"
         >
           <X className="h-4 w-4" aria-hidden="true" />
         </button>
 
-        {/* content swaps (fades in) when you step to another speaker */}
+        {/* mobile: this whole area scrolls. md+: two columns, only the bio scrolls */}
         <motion.div
           key={s.name}
           initial={{ opacity: 0, x: 16 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.25 }}
-          className="grid md:grid-cols-[2fr_3fr]"
+          className="min-h-0 flex-1 overflow-y-auto overscroll-contain md:grid md:grid-cols-[2fr_3fr] md:grid-rows-1 md:overflow-hidden"
         >
-          <div className="relative aspect-[4/5] bg-[#0b1b3d] md:aspect-auto md:min-h-96">
-            <Photo s={s} textSize="text-7xl" color />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0e0f12] via-transparent to-transparent md:bg-gradient-to-r md:from-transparent md:to-[#0e0f12]/70" />
+          {/* photo */}
+          {/* photo */}
+          <div className="group relative isolate h-80 shrink-0 overflow-hidden bg-gradient-to-b from-[#FCD608] via-[#4788C8] to-[#132049] pt-4 md:h-full">
+            <TechRing />
+            <div className="relative z-10 h-full">
+              <Photo s={s} textSize="text-7xl" color portrait />
+            </div>
+            <div className="pointer-events-none absolute inset-0 z-20 bg-gradient-to-t from-[#0e0f12] via-transparent via-20% to-transparent md:bg-gradient-to-r md:from-transparent md:via-transparent md:to-[#0e0f12]/70" />
+            <div
+              className="scan-line pointer-events-none absolute inset-0 z-30"
+              aria-hidden="true"
+            />
           </div>
 
-          <div className="flex flex-col p-6 sm:p-8">
-            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#4d9cff]">
+          {/* details */}
+          <div className="flex flex-col p-5 sm:p-6 md:min-h-0 md:p-8">
+            <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.2em] text-[#4d9cff]">
               {session}
             </span>
             <h3
               id="speaker-modal-title"
-              className="mt-3 text-3xl font-bold leading-tight text-white"
+              className="mt-3 shrink-0 text-2xl font-bold leading-tight text-white md:text-3xl"
             >
               {s.name}
             </h3>
-            <p className="mt-2 text-white/60">{s.role}</p>
+            <p className="mt-2 shrink-0 text-sm text-white/60 md:text-base">
+              {s.role}
+            </p>
 
             {s.topic && (
-              <div className="mt-6 rounded-xl border border-[#4d9cff]/30 bg-[#4d9cff]/10 p-4">
+              <div className="mt-4 shrink-0 rounded-xl border border-[#4d9cff]/30 bg-[#4d9cff]/10 p-3 md:mt-6 md:p-4">
                 <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#4d9cff]">
                   Topic
                 </p>
@@ -271,17 +440,25 @@ function SpeakerModal({
               </div>
             )}
 
-            <h4 className="mt-6 text-xs font-semibold uppercase tracking-[0.18em] text-white/50">
+            <h4 className="mt-5 shrink-0 text-xs font-semibold uppercase tracking-[0.18em] text-white/50 md:mt-6">
               About
             </h4>
-            <p className="mt-2 text-sm leading-7 text-white/75">
-              {s.bio ?? "Biography coming soon."}
-            </p>
+
+            {/* mobile: flows with the page. md+: this box scrolls on its own */}
+            <div
+              className="mt-2 md:min-h-0 md:flex-1 md:overflow-y-auto md:pr-2 md:[scrollbar-color:rgba(255,255,255,0.2)_transparent] md:[scrollbar-width:thin]"
+              tabIndex={0}
+              aria-label="Speaker biography"
+            >
+              <p className="text-sm leading-7 text-white/75">
+                {s.bio || "Biography coming soon."}
+              </p>
+            </div>
           </div>
         </motion.div>
 
         {/* footer: position + prev/next */}
-        <div className="flex items-center justify-between border-t border-white/10 px-6 py-4">
+        <div className="flex shrink-0 items-center justify-between border-t border-white/10 px-5 pb-[max(1rem,env(safe-area-inset-bottom))] pt-4 sm:px-6">
           <span className="font-mono text-xs text-white/50">
             <span className="text-white">
               {String(index + 1).padStart(2, "0")}
@@ -299,7 +476,7 @@ function SpeakerModal({
                 type="button"
                 onClick={fn}
                 aria-label={label}
-                className="flex h-8 w-8 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white hover:bg-white/10"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white hover:bg-white/10 md:h-8 md:w-8"
               >
                 <Icon className="h-4 w-4" aria-hidden="true" />
               </button>
@@ -315,9 +492,27 @@ export default function SpeakerDirectory() {
   const [active, setActive] = useState(SPEAKER_GROUPS[0].id);
   const [open, setOpen] = useState<Speaker | null>(null);
 
+  useEffect(() => {
+    const id = setTimeout(() => {
+      SPEAKER_GROUPS.forEach((g) =>
+        g.sessions.forEach((ss) =>
+          ss.speakers.forEach((p) => {
+            const u = thumbOf(p.image);
+            if (u) {
+              const img = new Image();
+              img.decoding = "async";
+              img.src = u;
+            }
+          }),
+        ),
+      );
+    }, 1500);
+    return () => clearTimeout(id);
+  }, []);
+  const FEATURED_IDS = ["featured", "program"];
   const group =
     SPEAKER_GROUPS.find((g) => g.id === active) ?? SPEAKER_GROUPS[0];
-  const featured = group.id === "featured";
+  const featured = FEATURED_IDS.includes(group.id);
 
   // every speaker in the current tab, in display order (for prev/next)
   const flat: Entry[] = group.sessions.flatMap((ss) =>
@@ -375,20 +570,24 @@ export default function SpeakerDirectory() {
         role="tabpanel"
         id={`panel-${group.id}`}
         aria-labelledby={`tab-${group.id}`}
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.35, ease: "easeOut" }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.25, ease: "easeOut" }}
         className="mt-8 space-y-12"
       >
         {group.sessions.map((session) => (
-          <section key={session.title} aria-label={session.title}>
+          <section
+            key={session.title}
+            aria-label={session.title}
+            className="[content-visibility:auto] [contain-intrinsic-size:auto_420px]"
+          >
             <SessionHeading
               title={session.title}
               total={session.speakers.length}
             />
 
             {featured ? (
-              <ul className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2">
+              <ul className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-2">
                 {session.speakers.map((s) => (
                   <FeaturedCard
                     key={s.name}

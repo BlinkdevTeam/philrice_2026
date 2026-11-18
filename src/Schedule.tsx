@@ -31,16 +31,17 @@ const TRACKS = Array.from(
 const colorOf = (track: string) =>
   TRACK_COLORS[TRACKS.indexOf(track) % TRACK_COLORS.length];
 
-const initials = (name: string) =>
-  name
-    .replace(
-      /^(Dr\.|Prof\.|Engr\.|Atty\.|Hon\.|Sec\.|Gov\.|Rep\.|Dir\.|Mr\.|Ms\.)\s*/,
-      "",
-    )
-    .split(" ")
-    .map((w) => w[0])
-    .slice(0, 2)
-    .join("");
+const initials = (name: string) => {
+  const parts = name
+    .replace(/^(?:[A-Z][a-z]{1,4}\.\s*)+/, "") // any leading title: Dr. Ms. Mr. Cong. Engr. ...
+    .replace(/,.*$/, "") // ", CESO III" and similar
+    .replace(/\s+(?:Jr|Sr)\.?$/i, "")
+    .trim()
+    .split(/\s+/);
+  const first = parts[0]?.[0] ?? "";
+  const last = parts.length > 1 ? parts[parts.length - 1][0] : "";
+  return (first + last).toUpperCase();
+};
 
 /* ---------- motion ---------- */
 const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
@@ -109,7 +110,7 @@ export default function Schedule() {
               <SectionLabel num="03" name="SCHEDULE" />
             </motion.div>
 
-            <h2 className="mt-4 text-4xl font-extrabold sm:text-5xl">
+            <h2 className="mt-4 text-4xl font-condensed font-bold sm:text-7xl">
               <span className="block overflow-hidden pb-1">
                 <motion.span variants={line} className="block">
                   Three Days.

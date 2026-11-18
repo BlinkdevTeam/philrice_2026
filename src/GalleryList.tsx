@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
+import { createPortal } from "react-dom";
 import {
+  AnimatePresence,
   animate,
   motion,
   useMotionValue,
@@ -8,7 +10,7 @@ import {
   type MotionValue,
   type PanInfo,
 } from "framer-motion";
-import { ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Maximize2, X } from "lucide-react";
 
 export type GalleryItem = { title: string; text: string; image?: string };
 
@@ -44,6 +46,127 @@ type CardProps = {
   hidden: boolean;
   onSelect: () => void;
 };
+
+function Lightbox({
+  items,
+  index,
+  onClose,
+  onGo,
+}: {
+  items: GalleryItem[];
+  index: number;
+  onClose: () => void;
+  onGo: (d: number) => void;
+}) {
+  const item = items[index];
+  const panelRef = useRef<HTMLDivElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
+
+  // lock page scroll, focus the dialog, and restore focus on close
+  useEffect(() => {
+    const opener = document.activeElement as HTMLElement | null;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    closeRef.current?.focus();
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      opener?.focus();
+    };
+  }, []);
+
+  const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "Escape") onClose();
+    if (e.key === "ArrowRight") onGo(1);
+    if (e.key === "ArrowLeft") onGo(-1);
+
+    if (e.key === "Tab") {
+      const els = panelRef.current?.querySelectorAll<HTMLElement>("button");
+      if (!els?.length) return;
+      const first = els[0];
+      const last = els[els.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  };
+
+  return (
+    <motion.div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+      onMouseDown={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+      onKeyDown={onKeyDown}
+    >
+      <motion.div
+        ref={panelRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label={`Photo ${index + 1} of ${items.length}`}
+        initial={{ opacity: 0, y: 20, scale: 0.97 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 12, scale: 0.98 }}
+        transition={{ type: "spring", stiffness: 260, damping: 26 }}
+        className="relative flex max-h-full max-w-5xl flex-col items-center gap-4"
+      >
+        <button
+          ref={closeRef}
+          type="button"
+          onClick={onClose}
+          aria-label="Close"
+          className="absolute right-3 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-black/50 text-white backdrop-blur-md hover:bg-white/10"
+        >
+          <X className="h-4 w-4" aria-hidden="true" />
+        </button>
+
+        <motion.img
+          key={item.image}
+          src={item.image}
+          alt=""
+          draggable={false}
+          initial={{ opacity: 0, scale: 0.98 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.25 }}
+          className="max-h-[78vh] w-auto max-w-full rounded-2xl border border-white/10 object-contain shadow-[0_0_80px_-20px_rgba(77,156,255,0.5)]"
+        />
+
+        <div className="flex w-full items-center justify-between px-1">
+          <span className="font-mono text-xs text-white/50">
+            <span className="text-white">
+              {String(index + 1).padStart(2, "0")}
+            </span>
+            {" / "}
+            {String(items.length).padStart(2, "0")}
+          </span>
+          <div className="flex gap-2">
+            {[
+              { d: -1, Icon: ChevronLeft, label: "Previous photo" },
+              { d: 1, Icon: ChevronRight, label: "Next photo" },
+            ].map(({ d, Icon, label }) => (
+              <button
+                key={label}
+                type="button"
+                onClick={() => onGo(d)}
+                aria-label={label}
+                className="flex h-8 w-8 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white hover:bg-white/10"
+              >
+                <Icon className="h-4 w-4" aria-hidden="true" />
+              </button>
+            ))}
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
 
 function Card({
   item,
@@ -90,9 +213,9 @@ function Card({
     <motion.li
       onClick={onSelect}
       aria-hidden={hidden}
-      className={`absolute bottom-0 left-0 aspect-3/4 lg:aspect-4/3 w-[58%] sm:w-[45%] lg:w-[45%] ${
+      className={`group absolute bottom-0 left-0 aspect-3/4 w-[58%] sm:w-[45%] lg:aspect-4/3 lg:w-[45%] ${
         hidden ? "pointer-events-none" : ""
-      } ${isActive ? "" : "cursor-pointer"}`}
+      } ${isActive ? "cursor-zoom-in" : "cursor-pointer"}`}
       style={{
         x,
         y,
@@ -125,38 +248,20 @@ function Card({
           />
         )}
 
-        {/* readability gradient behind the text */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(to top, rgba(0,0,0,.88), rgba(0,0,0,.25) 55%, transparent)",
-          }}
-        />
-
-        <div className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
-          <h3 className="text-base font-bold leading-tight text-white sm:text-lg">
-            {item.title}
-          </h3>
-          <p className="mt-1.5 line-clamp-3 text-xs leading-relaxed text-white/70 sm:text-sm">
-            {item.text}
-          </p>
-          <a
-            href="#schedule"
-            draggable={false}
-            tabIndex={isActive ? 0 : -1}
-            className={`mt-3 inline-flex items-center gap-1 text-xs font-semibold text-[#4d9cff] ${
-              isActive ? "" : "pointer-events-none"
-            }`}
+        {isActive && item.image && (
+          <span
+            aria-hidden="true"
+            className="absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-full border border-white/20 bg-black/40 text-white opacity-0 backdrop-blur-md transition-opacity duration-300 group-hover:opacity-100"
           >
-            Explore <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
-          </a>
-        </div>
+            <Maximize2 className="h-4 w-4" />
+          </span>
+        )}
       </div>
+
       <motion.div
         aria-hidden="true"
         style={{ opacity: dim }}
-        className="pointer-events-none absolute inset-0 bg-black"
+        className="pointer-events-none absolute inset-0 rounded-2xl bg-black"
       />
     </motion.li>
   );
@@ -206,6 +311,10 @@ export default function GalleryList({ items, autoPlay = 0 }: Props) {
     if (d > n / 2) d -= n; // take the shorter way round
     if (d !== 0) goBy(d);
   };
+
+  const [lightbox, setLightbox] = useState<number | null>(null);
+  const goLightbox = (d: number) =>
+    setLightbox((i) => (i === null ? i : wrap(i + d, n)));
 
   // optional autoplay, paused while hovered, focused or dragging
   const paused = useRef(false);
@@ -260,6 +369,7 @@ export default function GalleryList({ items, autoPlay = 0 }: Props) {
   const onKeyDown = (e: KeyboardEvent<HTMLUListElement>) => {
     if (e.key === "ArrowRight") goBy(1);
     if (e.key === "ArrowLeft") goBy(-1);
+    if (e.key === "Enter" && items[active]?.image) setLightbox(active);
   };
 
   return (
@@ -309,8 +419,9 @@ export default function GalleryList({ items, autoPlay = 0 }: Props) {
                 isActive={rel === 0}
                 hidden={rel < 0 || rel > VISIBLE}
                 onSelect={() => {
-                  if (dragged.current) return; // a swipe isn't a card click
+                  if (dragged.current) return; // a swipe isn't a click
                   if (rel !== 0) goToIndex(i);
+                  else if (item.image) setLightbox(i);
                 }}
               />
             );
@@ -326,7 +437,7 @@ export default function GalleryList({ items, autoPlay = 0 }: Props) {
           </span>
           <div className="h-px w-32 bg-white/15">
             <div
-              className="h-full bg-[#4d9cff] transition-[width] duration-500"
+              className="h-full bg-[#FCD608] transition-[width] duration-500"
               style={{ width: `${((active + 1) / n) * 100}%` }}
             />
           </div>
@@ -350,6 +461,20 @@ export default function GalleryList({ items, autoPlay = 0 }: Props) {
           ))}
         </div>
       </div>
+      {createPortal(
+        <AnimatePresence>
+          {lightbox !== null && (
+            <Lightbox
+              key="gallery-lightbox"
+              items={items}
+              index={lightbox}
+              onClose={() => setLightbox(null)}
+              onGo={goLightbox}
+            />
+          )}
+        </AnimatePresence>,
+        document.body,
+      )}
     </div>
   );
 }

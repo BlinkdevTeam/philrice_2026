@@ -1,5 +1,51 @@
 @import "tailwindcss";
 
+@theme {
+   --font-sans: "Folio", ui-sans-serif, system-ui, sans-serif;
+   --font-condensed: "Folio Condensed", "Folio", ui-sans-serif, sans-serif;
+}
+
+@font-face {
+   font-family: "Folio";
+   src: url("/fonts/Folio-Std-Light.woff2") format("woff2");
+   font-weight: 300;
+   font-style: normal;
+   font-display: swap;
+}
+
+@font-face {
+   font-family: "Folio";
+   src: url("/fonts/Folio-Std-Medium.woff2") format("woff2");
+   font-weight: 500;
+   font-style: normal;
+   font-display: swap;
+}
+
+@font-face {
+   font-family: "Folio";
+   src: url("/fonts/Folio-Std-Bold.woff2") format("woff2");
+   font-weight: 700;
+   font-style: normal;
+   font-display: swap;
+}
+
+@font-face {
+   font-family: "Folio";
+   src: url("/fonts/Folio-Std-Extra-Bold.woff2") format("woff2");
+   font-weight: 800;
+   font-style: normal;
+   font-display: swap;
+}
+
+/* the condensed cut is its own family, so it doesn't clash with the Bold above */
+@font-face {
+   font-family: "Folio Condensed";
+   src: url("/fonts/Folio-Std-Bold-Condensed.woff2") format("woff2");
+   font-weight: 700;
+   font-style: normal;
+   font-display: swap;
+}
+
 html {
    scrollbar-width: none;
    /* Firefox */

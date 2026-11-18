@@ -278,3 +278,9 @@
     animation: none;
   }
 }
+
+@keyframes hud-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

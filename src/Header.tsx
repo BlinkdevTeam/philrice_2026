@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { NAV } from "./nav";
+import philriceLogo from "./assets/philriceLogo.svg";
 
 export default function Header() {
   const [hidden, setHidden] = useState(false);
@@ -51,12 +52,12 @@ export default function Header() {
       }`}
     >
       <div className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-6">
-        <a href="#top" className="flex items-center gap-3 text-xl font-bold">
-          <span
-            className="h-10 w-10 rounded-lg border border-white/20 bg-white/10"
-            aria-hidden="true"
+        <a href="#top" className="flex items-center">
+          <img
+            src={philriceLogo}
+            alt="PhilRice Logo"
+            className="h-12 w-auto object-contain"
           />
-          PHILRICE
         </a>
 
         <nav className="hidden gap-10 md:flex" aria-label="Primary">
