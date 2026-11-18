@@ -118,7 +118,7 @@ export default function Schedule() {
               </span>
               <span className="block overflow-hidden pb-1">
                 <motion.span variants={line} className="block text-white/60">
-                  {TRACKS.length} Tracks.
+                  9 Tracks.
                 </motion.span>
               </span>
             </h2>

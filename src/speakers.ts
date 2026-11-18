@@ -106,7 +106,7 @@ export const SPEAKER_GROUPS: SpeakerGroup[] = [
     label: "Opening Program",
     sessions: [
       {
-        title: "Opening Program",
+        title: "Welcome Remarks",
         speakers: [
           {
             name: "Hon. Arthur Defensor Jr.",
@@ -115,6 +115,11 @@ export const SPEAKER_GROUPS: SpeakerGroup[] = [
             part: "Welcome Remarks",
             bio:"",
           },
+        ],
+      },
+      {
+        title: "Opening Program",
+        speakers: [
           {
             name: "Dr. John C. de Leon",
             image: photo("de_leon"),

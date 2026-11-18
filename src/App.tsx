@@ -5,7 +5,7 @@ import {
   MotionConfig,
   animate,
   motion,
-  useInView,
+  // useInView,
   useMotionValue,
   useReducedMotion,
   useTransform,
@@ -17,7 +17,7 @@ import { Mail, Plus, ArrowUp, ArrowUpRight } from "lucide-react";
 
 import Header from "./Header";
 import GalleryList from "./GalleryList";
-import { SPEAKER_GROUPS } from "./speakers";
+// import { SPEAKER_GROUPS } from "./speakers";
 import SpeakerDirectory from "./SpeakerDirectory";
 import Schedule from "./Schedule";
 import GridRain from "./GridRain";
@@ -153,48 +153,52 @@ const highlight: Variants = {
 };
 
 // "10+" → counts 0 → 10 and keeps the "+"; "5,000" keeps the comma
-function CountStat({ value }: { value: string }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
-  const reduce = useReducedMotion();
+// function CountStat({ value }: { value: string }) {
+//   const ref = useRef<HTMLSpanElement>(null);
+//   const inView = useInView(ref, { once: true, margin: "-80px" });
+//   const reduce = useReducedMotion();
 
-  const match = value.match(/^([\d,]+)(.*)$/);
-  const target = match ? Number(match[1].replace(/,/g, "")) : 0;
-  const suffix = match?.[2] ?? "";
+//   const match = value.match(/^([\d,]+)(.*)$/);
+//   const target = match ? Number(match[1].replace(/,/g, "")) : 0;
+//   const suffix = match?.[2] ?? "";
 
-  const count = useMotionValue(reduce ? target : 0);
-  const text = useTransform(count, (v) =>
-    Math.round(v).toLocaleString("en-US"),
-  );
+//   const count = useMotionValue(reduce ? target : 0);
+//   const text = useTransform(count, (v) =>
+//     Math.round(v).toLocaleString("en-US"),
+//   );
 
-  useEffect(() => {
-    if (!inView || reduce || !match) return;
-    const c = animate(count, target, { duration: 1.6, delay: 0.4, ease: EASE });
-    return () => c.stop();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [inView, reduce, target]);
+//   useEffect(() => {
+//     if (!inView || reduce || !match) return;
+//     const c = animate(count, target, { duration: 1.6, delay: 0.4, ease: EASE });
+//     return () => c.stop();
+//     // eslint-disable-next-line react-hooks/exhaustive-deps
+//   }, [inView, reduce, target]);
 
-  if (!match) return <span>{value}</span>;
+//   if (!match) return <span>{value}</span>;
 
-  return (
-    <span ref={ref}>
-      <motion.span>{text}</motion.span>
-      {suffix}
-    </span>
-  );
-}
+//   return (
+//     <span ref={ref}>
+//       <motion.span>{text}</motion.span>
+//       {suffix}
+//     </span>
+//   );
+// }
 // -------------------End of About--------------------- //
 
 // -------------------Start of Speakers--------------------- //
 // unique people across every group (Dr. Pinto appears in two sessions)
 // groups that don't count toward the header total
-const EXCLUDED_GROUPS = ["featured", "program"];
+// const EXCLUDED_GROUPS = ["featured", "program"];
 
-const SPEAKER_TOTAL = new Set(
-  SPEAKER_GROUPS.filter((g) => !EXCLUDED_GROUPS.includes(g.id)).flatMap((g) =>
-    g.sessions.flatMap((s) => s.speakers.map((p) => p.name)),
-  ),
-).size;
+// const SPEAKER_TOTAL = new Set(
+//   SPEAKER_GROUPS.filter((g) => !EXCLUDED_GROUPS.includes(g.id)).flatMap((g) =>
+//     g.sessions.flatMap((s) => s.speakers.map((p) => p.name)),
+//   ),
+// ).size;
+
+// -------------------Start of Speakers--------------------- //
+const SPEAKER_TOTAL = 42;
+// -------------------End of Speakers--------------------- //
 // -------------------End of Speakers--------------------- //
 
 // -------------------Start of faqs--------------------- //
@@ -422,7 +426,9 @@ export default function App() {
                           {s.l}
                         </dt>
                         <dd className="text-4xl font-bold tabular-nums text-[#FCD608]">
-                          <CountStat value={s.n} />
+                          {s.l.toLowerCase() === "speakers"
+                            ? SPEAKER_TOTAL
+                            : s.n}
                         </dd>
                       </div>
                     ))}
@@ -497,7 +503,7 @@ export default function App() {
 
                 <motion.div variants={rise} className="text-right">
                   <p className="text-5xl text-[#FCD608] font-bold tabular-nums">
-                    <CountStat value={String(SPEAKER_TOTAL)} />
+                    {SPEAKER_TOTAL}
                   </p>
                   <p className="mt-1 text-[10px] font-medium uppercase tracking-[0.2em] text-white/50">
                     Speakers
