@@ -63,11 +63,11 @@ export default function Header() {
         <nav className="hidden gap-10 md:flex" aria-label="Primary">
           {NAV.map((n) => (
             <a
-              key={n}
-              href={`#${n.toLowerCase()}`}
+              key={n.href}
+              href={n.href}
               className="text-white/70 transition-colors hover:text-white"
             >
-              {n}
+              {n.label}
             </a>
           ))}
         </nav>

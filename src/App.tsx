@@ -271,6 +271,35 @@ export default function App() {
 
   const reduce = useReducedMotion();
 
+  // jump to /#section once the lazy sections have mounted
+  useEffect(() => {
+    let timer: number | undefined;
+
+    const goTo = () => {
+      const id = decodeURIComponent(window.location.hash.slice(1));
+      if (!id) return;
+      window.clearInterval(timer);
+      let tries = 0;
+      timer = window.setInterval(() => {
+        const el = document.getElementById(id);
+        if (el) {
+          window.clearInterval(timer);
+          el.scrollIntoView();
+        } else if (++tries > 50) {
+          window.clearInterval(timer); // give up after about 5 seconds
+        }
+      }, 100);
+    };
+
+    goTo(); // on first load
+    window.addEventListener("hashchange", goTo); // when the hash changes later
+
+    return () => {
+      window.clearInterval(timer);
+      window.removeEventListener("hashchange", goTo);
+    };
+  }, []);
+
   // count-up progress (0 → 1), shared by all four tiles
   const intro = useMotionValue(0);
   useEffect(() => {

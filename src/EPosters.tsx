@@ -359,7 +359,10 @@ export default function EPosters() {
   };
 
   return (
-    <section id="eposters" className="border-t border-white/10 py-24">
+    <section
+      id="eposters"
+      className="scroll-mt-20 border-t border-white/10 py-24"
+    >
       <div className={WRAP}>
         <motion.div
           {...reveal}
