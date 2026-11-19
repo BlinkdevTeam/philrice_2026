@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, lazy, Suspense } from "react";
 
 import "./App.css";
 import {
@@ -19,13 +19,14 @@ import Header from "./Header";
 import GalleryList from "./GalleryList";
 // import { SPEAKER_GROUPS } from "./speakers";
 import SpeakerDirectory from "./SpeakerDirectory";
-import Schedule from "./Schedule";
+// import Schedule from "./Schedule";
 import GridRain from "./GridRain";
 import LockHero from "./LockHero";
+// import EPosters from "./EPosters";
 
 import { EVENT_DATE, DETAILS, STATS, FEATURES, FAQS, FOOT_COLS } from "./data";
 
-import daPHILRICE from "./assets/da-philrice.png";
+import daPHILRICE from "./assets/da-philrice.webp";
 import BagongPilipinas from "./assets/bagong-pilipinas.png";
 import UgnayPalay from "./assets/ugnay-palay-logo.png";
 
@@ -68,6 +69,9 @@ const tile: Variants = {
     transition: { duration: 0.7, ease: EASE },
   },
 };
+
+const EPosters = lazy(() => import("./EPosters"));
+const Schedule = lazy(() => import("./Schedule"));
 
 // shows 0 → value while the intro plays, then the live value
 function CountNumber({
@@ -524,7 +528,10 @@ export default function App() {
         </MotionConfig>
 
         {/* schedule (Schedule renders its own <section id="schedule">) */}
-        <Schedule />
+        <Suspense fallback={<div className="min-h-[40rem]" />}>
+          <Schedule />
+          <EPosters />
+        </Suspense>
 
         {/* faq */}
         <MotionConfig reducedMotion="user">
