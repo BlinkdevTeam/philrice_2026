@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#121314" />
+    <title>Souvenir Program · 38th Ugnay Palay</title>
+    <meta property="og:title" content="Souvenir Program · 38th Ugnay Palay" />
+    <meta
+      property="og:description"
+      content="Download the official souvenir program of the 38th Ugnay Palay National Rice R4DE Conference."
+    />
+    <meta property="og:type" content="website" />
+    <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+
+    <style>
+      @font-face {
+        font-family: "Folio";
+        src: url("../fonts/Folio-Std-Medium.woff2") format("woff2");
+        font-weight: 500;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: "Folio";
+        src: url("../fonts/Folio-Std-Bold.woff2") format("woff2");
+        font-weight: 700;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: "Folio Condensed";
+        src: url("../fonts/Folio-Std-Bold-Condensed.woff2") format("woff2");
+        font-weight: 700;
+        font-display: swap;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        min-height: 100dvh;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        position: relative;
+        isolation: isolate;
+        overflow: hidden;
+        background: #121314;
+        color: #fff;
+        font-family: "Folio", ui-sans-serif, system-ui, sans-serif;
+        font-weight: 500;
+      }
+
+      /* ---------- background ---------- */
+      .grid-bg {
+        position: fixed;
+        inset: 0;
+        z-index: -2;
+        background-image:
+          linear-gradient(to right, rgba(77, 156, 255, 0.07) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(77, 156, 255, 0.07) 1px, transparent 1px);
+        background-size: 80px 80px;
+        -webkit-mask-image: radial-gradient(ellipse at center, #000 20%, transparent 75%);
+        mask-image: radial-gradient(ellipse at center, #000 20%, transparent 75%);
+      }
+      .glow {
+        position: fixed;
+        z-index: -1;
+        border-radius: 50%;
+        pointer-events: none;
+        animation: breathe 8s ease-in-out infinite alternate;
+      }
+      .glow.a {
+        top: -20vmax;
+        left: -15vmax;
+        width: 60vmax;
+        height: 60vmax;
+        background: radial-gradient(circle closest-side, rgba(77, 156, 255, 0.45), transparent);
+      }
+      .glow.b {
+        bottom: -25vmax;
+        right: -20vmax;
+        width: 65vmax;
+        height: 65vmax;
+        background: radial-gradient(circle closest-side, rgba(0, 85, 255, 0.4), transparent);
+        animation-duration: 11s;
+        animation-delay: -4s;
+      }
+      @keyframes breathe {
+        from { opacity: 0.45; transform: scale(0.95); }
+        to   { opacity: 0.9;  transform: scale(1.08); }
+      }
+
+      /* ---------- card ---------- */
+      .card {
+        width: 100%;
+        max-width: 520px;
+        padding: 44px 32px 32px;
+        text-align: center;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 28px;
+        background: rgba(255, 255, 255, 0.05);
+        -webkit-backdrop-filter: blur(14px);
+        backdrop-filter: blur(14px);
+        box-shadow: 0 0 90px -30px rgba(77, 156, 255, 0.55);
+        animation: rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+      }
+      @keyframes rise {
+        from { opacity: 0; transform: translateY(24px); }
+        to   { opacity: 1; transform: none; }
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 7px 14px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.05);
+        font-size: 11px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.8);
+      }
+      .badge i {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #4d9cff;
+        box-shadow: 0 0 10px #4d9cff;
+      }
+
+      /* ---------- emblem: tech ring + icon ---------- */
+      .emblem {
+        position: relative;
+        width: 132px;
+        height: 132px;
+        margin: 32px auto 8px;
+        color: #dcecff;
+      }
+      .emblem svg.ring { position: absolute; inset: 0; width: 100%; height: 100%; }
+      .spin {
+        transform-box: view-box;
+        transform-origin: 50% 50%;
+        animation: spin 24s linear infinite;
+      }
+      .spin.rev { animation-duration: 14s; animation-direction: reverse; }
+      .spin.fast { animation-duration: 6s; }
+      @keyframes spin { to { transform: rotate(360deg); } }
+
+      .icon {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        color: #fcd608;
+      }
+      .icon svg { width: 40px; height: 40px; }
+      .icon .arrow { animation: bob 1.6s ease-in-out infinite; }
+      @keyframes bob {
+        0%, 100% { transform: translateY(-2px); }
+        50%      { transform: translateY(3px); }
+      }
+      .icon .check { display: none; }
+
+      /* ---------- text ---------- */
+      h1 {
+        margin: 24px 0 0;
+        font-family: "Folio Condensed", "Folio", ui-sans-serif, sans-serif;
+        font-weight: 700;
+        font-size: clamp(2.75rem, 11vw, 4rem);
+        line-height: 0.95;
+        text-transform: uppercase;
+        color: #fcd608;
+      }
+      .sub {
+        margin: 14px 0 0;
+        font-size: 1rem;
+        line-height: 1.6;
+        color: rgba(255, 255, 255, 0.65);
+      }
+      .status {
+        margin: 24px 0 0;
+        min-height: 1.5em;
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.85);
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 22px;
+        padding: 14px 28px;
+        border: 0;
+        border-radius: 999px;
+        background: #fff;
+        color: #000;
+        font: inherit;
+        font-weight: 700;
+        font-size: 0.95rem;
+        text-decoration: none;
+        cursor: pointer;
+        transition: box-shadow 0.3s, transform 0.3s;
+      }
+      .btn:hover { box-shadow: 0 0 40px -4px rgba(77, 156, 255, 0.8); transform: translateY(-1px); }
+      .btn:focus-visible { outline: 2px solid #4d9cff; outline-offset: 3px; }
+      .btn svg { width: 18px; height: 18px; }
+
+      .meta {
+        margin: 12px 0 0;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 10px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.45);
+      }
+
+      .foot {
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 8px 16px;
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.5);
+      }
+      .foot a { color: rgba(255, 255, 255, 0.7); text-decoration: none; }
+      .foot a:hover { color: #fff; }
+
+      /* ---------- states ---------- */
+      [data-state="done"] .icon .arrow { display: none; }
+      [data-state="done"] .icon .check { display: block; }
+      [data-state="done"] .spin { animation-duration: 40s; }
+      [data-state="starting"] .spin.fast { animation-duration: 2.2s; }
+
+      [data-state="unavailable"] .btn,
+      [data-state="unavailable"] .meta { display: none; }
+      [data-state="unavailable"] .emblem { opacity: 0.45; }
+      [data-state="unavailable"] .spin,
+      [data-state="unavailable"] .icon .arrow { animation: none; }
+
+      @media (prefers-reduced-motion: reduce) {
+        .glow, .card, .spin, .icon .arrow { animation: none; }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="grid-bg" aria-hidden="true"></div>
+    <div class="glow a" aria-hidden="true"></div>
+    <div class="glow b" aria-hidden="true"></div>
+
+    <main class="card" id="card" data-state="idle">
+      <span class="badge"><i></i>38th Ugnay Palay · Nov 23–25, 2026</span>
+
+      <div class="emblem" aria-hidden="true">
+        <svg class="ring" viewBox="0 0 200 200">
+          <circle cx="100" cy="100" r="97" fill="none" stroke="currentColor" stroke-opacity="0.25" stroke-width="0.8" />
+          <path d="M100 0v10M100 190v10M0 100h10M190 100h10" stroke="currentColor" stroke-opacity="0.6" stroke-width="1.2" />
+          <g class="spin">
+            <circle cx="100" cy="100" r="88" fill="none" stroke="currentColor" stroke-opacity="0.5" stroke-width="4" stroke-dasharray="0.8 5.553" />
+          </g>
+          <g class="spin rev">
+            <circle cx="100" cy="100" r="78" fill="none" stroke="currentColor" stroke-opacity="0.8" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="90 18 55 18 33 18" />
+          </g>
+          <g class="spin fast">
+            <circle cx="100" cy="100" r="68" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="55 372" />
+          </g>
+          <g class="spin rev">
+            <circle cx="100" cy="9" r="4.5" fill="currentColor" fill-opacity="0.25" />
+            <circle cx="100" cy="9" r="2.4" fill="currentColor" />
+          </g>
+        </svg>
+
+        <div class="icon">
+          <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3v12" /><path d="m7 10 5 5 5-5" /><path d="M5 21h14" />
+          </svg>
+          <svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 6 9 17l-5-5" />
+          </svg>
+        </div>
+      </div>
+
+      <h1>Souvenir<br />Program</h1>
+      <p class="sub">38th Ugnay Palay<br />National Rice R4DE Conference</p>
+
+      <p class="status" id="status" role="status" aria-live="polite">
+        Download the official souvenir program below.
+      </p>
+
+      <a id="dl" class="btn" href="../downloads/ugnay-palay-2026-souvenir-program.pdf" download>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 3v12" /><path d="m7 10 5 5 5-5" /><path d="M5 21h14" />
+        </svg>
+        <span id="label">Download PDF</span>
+      </a>
+      <p class="meta" id="size">PDF</p>
+
+      <div class="foot">
+        <a href="../">← Back to the website</a>
+        <span>DA-PhilRice</span>
+      </div>
+    </main>
+
+    <script>
+      (function () {
+        var card = document.getElementById("card");
+        var link = document.getElementById("dl");
+        var status = document.getElementById("status");
+        var size = document.getElementById("size");
+        var label = document.getElementById("label");
+
+        function set(state, text) {
+          card.dataset.state = state;
+          if (text) status.textContent = text;
+        }
+
+        function fmt(bytes) {
+          var mb = bytes / 1048576;
+          return mb >= 1 ? mb.toFixed(1) + " MB" : Math.round(bytes / 1024) + " KB";
+        }
+
+        function start() {
+          set("starting", "Your download is starting…");
+          setTimeout(function () {
+            link.click();
+            setTimeout(function () {
+              label.textContent = "Download again";
+              set("done", "Download started. Check your downloads folder.");
+            }, 900);
+          }, 900);
+        }
+
+        set("checking", "Preparing your download…");
+
+        // only start the download if the file really is a PDF
+        fetch(link.href, { method: "HEAD" })
+          .then(function (res) {
+            var type = res.headers.get("content-type") || "";
+            if (!res.ok || type.indexOf("pdf") === -1) {
+              set("unavailable", "The souvenir program isn't available yet. Please check back soon.");
+              return;
+            }
+            var len = Number(res.headers.get("content-length"));
+            if (len) size.textContent = "PDF · " + fmt(len);
+            start();
+          })
+          .catch(start);
+      })();
+    </script>
+  </body>
+</html>

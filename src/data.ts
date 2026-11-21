@@ -568,6 +568,7 @@ export const FOOT_COLS: { title: string; links: FootLink[] }[] = [
     links: [
       { label: "About", href: "#about", plus: true },
       { label: "Schedule", href: "#schedule", plus: true },
+      { label: "Souvenir Program (PDF)", href: "/downloads/ugnay-palay-2026-souvenir-program.pdf" },
     ],
   },
   {

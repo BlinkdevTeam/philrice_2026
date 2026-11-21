@@ -851,7 +851,9 @@ export default function App() {
                             href={l.href}
                             {...(external
                               ? { target: "_blank", rel: "noopener noreferrer" }
-                              : {})}
+                              : l.href.endsWith(".pdf")
+                                ? { download: true }
+                                : {})}
                             className="group inline-flex items-center gap-1.5 text-sm text-white/70 transition-colors hover:text-white"
                           >
                             <span className="relative">

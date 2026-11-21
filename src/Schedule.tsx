@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { MotionConfig, motion, type Variants } from "framer-motion";
+import { Download } from "lucide-react";
 import { WRAP, SectionLabel } from "./ui";
 import { SCHEDULE } from "./data";
+
+// souvenir program: the file lives in public/downloads/
+const PROGRAM_URL = "/downloads/ugnay-palay-2026-souvenir-program.pdf";
+const PROGRAM_SIZE = "PDF · 11.6 MB"; // TODO: put the real file size
 
 const DAYS = [
   { id: 1, label: "Day 1", date: "Nov 23" },
@@ -110,18 +115,43 @@ export default function Schedule() {
               <SectionLabel num="03" name="SCHEDULE" />
             </motion.div>
 
-            <h2 className="mt-4 text-4xl font-condensed font-bold sm:text-7xl">
-              <span className="block overflow-hidden pb-1">
-                <motion.span variants={line} className="block">
-                  Three Days.
-                </motion.span>
-              </span>
-              <span className="block overflow-hidden pb-1">
-                <motion.span variants={line} className="block text-white/60">
-                  9 Tracks.
-                </motion.span>
-              </span>
-            </h2>
+            {/* heading on the left, souvenir program download on the right */}
+            <div className="flex flex-wrap items-end justify-between gap-6">
+              <h2 className="mt-4 text-4xl font-condensed font-bold sm:text-7xl">
+                <span className="block overflow-hidden pb-1">
+                  <motion.span variants={line} className="block">
+                    Three Days.
+                  </motion.span>
+                </span>
+                <span className="block overflow-hidden pb-1">
+                  <motion.span variants={line} className="block text-white/60">
+                    9 Tracks.
+                  </motion.span>
+                </span>
+              </h2>
+
+              <motion.a
+                variants={rise}
+                href={PROGRAM_URL}
+                download
+                className="group inline-flex items-center gap-3 rounded-2xl border border-white/15 bg-white/5 py-3 pl-4 pr-5 backdrop-blur-md transition duration-300 hover:-translate-y-0.5 hover:border-[#4d9cff]/50 hover:bg-white/10 hover:shadow-[0_0_30px_-8px_rgba(77,156,255,0.6)]"
+              >
+                <span className="grid h-10 w-10 place-items-center rounded-full border border-[#4d9cff]/40 bg-[#4d9cff]/10 text-[#4d9cff]">
+                  <Download
+                    className="h-5 w-5 transition-transform duration-300 group-hover:translate-y-0.5"
+                    aria-hidden="true"
+                  />
+                </span>
+                <span className="text-left">
+                  <span className="block text-sm font-semibold text-white">
+                    Souvenir Program
+                  </span>
+                  <span className="block font-mono text-[10px] uppercase tracking-[0.2em] text-white/50">
+                    {PROGRAM_SIZE}
+                  </span>
+                </span>
+              </motion.a>
+            </div>
 
             {/* day tabs: the white pill slides between days */}
             <motion.div
